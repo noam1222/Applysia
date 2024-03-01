@@ -3,6 +3,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 class MenuSlot(QtWidgets.QFrame):
     def __init__(self, parent, icon_path, label_text, font_size=30):
         super().__init__(parent)
+        
         self.setStyleSheet("QFrame{border-bottom: 1px solid rgba(0, 0, 0, 50%);}\n"
                            "QFrame:hover{background-color : rgb(156, 156, 156)}\n"
                            "QLabel{background-color: transparent;}")
