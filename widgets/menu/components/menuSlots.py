@@ -1,7 +1,8 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
+from constants import getIconPath
 
 class MenuSlot(QtWidgets.QFrame):
-    def __init__(self, parent, icon_path, label_text, font_size=30):
+    def __init__(self, parent, icon, label_text, font_size=30):
         super().__init__(parent)
         
         self.setStyleSheet("QFrame{border-bottom: 1px solid rgba(0, 0, 0, 50%);}\n"
@@ -20,7 +21,7 @@ class MenuSlot(QtWidgets.QFrame):
         self.icon = QtWidgets.QLabel(self)
         self.icon.setMaximumSize(QtCore.QSize(50, 50))
         self.icon.setStyleSheet("border-bottom: 0px;")
-        self.icon.setPixmap(QtGui.QPixmap(icon_path))
+        self.icon.setPixmap(QtGui.QPixmap(getIconPath(icon)))
         self.icon.setObjectName("MenuIcon")
         self.horizontalLayout.addWidget(self.icon)
 

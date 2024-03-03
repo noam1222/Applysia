@@ -1,7 +1,6 @@
 from .headline import HeadlineHome
-from .aplysiaImg import AplysiaImg
-from .videoIcon import VideoIcon
 from .subHeadline import SubHeadline
 from .textEdit import TextEdit
+from .toolBtn import ToolBtn
 
-__all__ = ["HeadlineHome", "AplysiaImg", "VideoIcon",  "SubHeadline", "TextEdit"]
+__all__ = ["HeadlineHome",  "SubHeadline", "TextEdit", "ToolBtn"]

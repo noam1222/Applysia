@@ -1,5 +1,6 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 from .components import *
+from constants import *
 
 class HomeWidget(QtWidgets.QWidget):
     def __init__(self, parent):
@@ -24,7 +25,15 @@ class HomeWidget(QtWidgets.QWidget):
         self.headline = HeadlineHome(self, text="Home")
         self.verticalLayout_2.addWidget(self.headline)
 
-        self.aplysiaCartoon = AplysiaImg(self)
+        self.aplysiaCartoon = QtWidgets.QLabel()
+        self.aplysiaCartoon.setMaximumSize(QtCore.QSize(488, 302))
+        self.aplysiaCartoon.setStyleSheet("")
+        self.aplysiaCartoon.setText("")
+        self.aplysiaCartoon.setPixmap(QtGui.QPixmap(getImgPath("aplysia.png")))
+        self.aplysiaCartoon.setScaledContents(True)
+        self.aplysiaCartoon.setAlignment(QtCore.Qt.AlignCenter)
+        self.aplysiaCartoon.setWordWrap(False)
+        self.aplysiaCartoon.setObjectName("aplysiaCartoon")
         self.verticalLayout_2.addWidget(self.aplysiaCartoon)
 
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
@@ -34,7 +43,12 @@ class HomeWidget(QtWidgets.QWidget):
             40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_5.addItem(spacerItem2)
 
-        self.videoIcon = VideoIcon(self)
+        self.videoIcon = QtWidgets.QLabel()
+        self.videoIcon.setMaximumSize(QtCore.QSize(50, 50))
+        self.videoIcon.setText("")
+        self.videoIcon.setPixmap(QtGui.QPixmap(getIconPath("video_icon.png")))
+        self.videoIcon.setScaledContents(True)
+        self.videoIcon.setObjectName("videoIcon")
         self.horizontalLayout_5.addWidget(self.videoIcon)
 
         self.chooseVideoBtn = QtWidgets.QPushButton(
@@ -75,14 +89,7 @@ class HomeWidget(QtWidgets.QWidget):
         self.dateTextEdit = TextEdit(self, "DD/MM/YY", "dateTextEdit")
         self.horizontalLayout_6.addWidget(self.dateTextEdit)
 
-        self.dateToolBtn = QtWidgets.QToolButton(self)
-        self.dateToolBtn.setStyleSheet("background-color: transparent;")
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("res/icons/date_icon.png"),
-                       QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.dateToolBtn.setIcon(icon)
-        self.dateToolBtn.setIconSize(QtCore.QSize(50, 50))
-        self.dateToolBtn.setObjectName("dateToolBtn")
+        self.dateToolBtn = ToolBtn(self, "date_icon.png", "dateToolBtn")
         self.horizontalLayout_6.addWidget(self.dateToolBtn)
 
         spacerItem5 = QtWidgets.QSpacerItem(
@@ -103,15 +110,8 @@ class HomeWidget(QtWidgets.QWidget):
         self.timeEditText = TextEdit(self, "HH:MM", "timeEditText")
         self.horizontalLayout_7.addWidget(self.timeEditText)
 
-        self.toolButton_2 = QtWidgets.QToolButton(self)
-        self.toolButton_2.setStyleSheet("background-color: transparent;")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("res/icons/time_icon.png"),
-                        QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.toolButton_2.setIcon(icon1)
-        self.toolButton_2.setIconSize(QtCore.QSize(50, 50))
-        self.toolButton_2.setObjectName("toolButton_2")
-        self.horizontalLayout_7.addWidget(self.toolButton_2)
+        self.timeToolBtn = ToolBtn(self, "time_icon.png", "timeToolBtn")
+        self.horizontalLayout_7.addWidget(self.timeToolBtn)
 
         spacerItem7 = QtWidgets.QSpacerItem(
             40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)

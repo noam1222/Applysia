@@ -21,15 +21,15 @@ class Menu(QtWidgets.QWidget):
         self.verticalLayout.addWidget(self.headline)
 
         # Home slot
-        self.HomeSlot = MenuSlot(self, "res/icons/home_icon.png", "Home")
+        self.HomeSlot = MenuSlot(self, "home_icon.png", "Home")
         self.verticalLayout.addWidget(self.HomeSlot)
 
         # Reports slot
-        self.ReportsSlot = MenuSlot(self, "res/icons/report_icon.png", "Reports")
+        self.ReportsSlot = MenuSlot(self, "report_icon.png", "Reports")
         self.verticalLayout.addWidget(self.ReportsSlot)
 
         # Analytics Slot
-        self.AnalyticsSlot = MenuSlot(self, "res/icons/analytics_icon.png", "Analytics")
+        self.AnalyticsSlot = MenuSlot(self, "analytics_icon.png", "Analytics")
         self.verticalLayout.addWidget(self.AnalyticsSlot)
 
         # vertical spacer to push all up
