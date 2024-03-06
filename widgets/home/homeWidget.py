@@ -7,7 +7,7 @@ class HomeWidget(QtWidgets.QWidget):
         super(HomeWidget, self).__init__(parent)
 
         self.setGeometry(QtCore.QRect(280, -30, 721, 761))
-        self.setObjectName("horizontalLayoutHomeWidget")
+        self.setObjectName("HomeWidget")
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(
             self)
         self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)

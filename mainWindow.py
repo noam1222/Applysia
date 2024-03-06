@@ -45,16 +45,17 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setCentralWidget(self.centralwidget)
 
     def menuSlotClicked(self, slotName):
+        # check if clicked on open window slot
+        if slotName in self.actionWindow.objectName():
+            return
+        self.actionWindow.hide()
         if slotName == HOME_TXT:
-            self.actionWindow.hide()
             self.actionWindow = HomeWidget(self.centralwidget)
-            self.actionWindow.show()
         elif slotName == REPORTS_TXT:
-            self.actionWindow.hide()
             self.actionWindow = LibraryWidget(self.centralwidget)
-            self.actionWindow.show()
         elif slotName == ANALYTICS_TXT:
             pass
+        self.actionWindow.show()
 
 
     
