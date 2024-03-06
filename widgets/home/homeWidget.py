@@ -6,7 +6,6 @@ class HomeWidget(QtWidgets.QWidget):
     def __init__(self, parent):
         super(HomeWidget, self).__init__(parent)
 
-        self = QtWidgets.QWidget(parent)
         self.setGeometry(QtCore.QRect(280, -30, 721, 761))
         self.setObjectName("horizontalLayoutHomeWidget")
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(

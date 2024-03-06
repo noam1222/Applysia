@@ -1,14 +1,18 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
-from constants import getIconPath
+from constants import *
+from res.colors import *
 
+RGLR_STYLE = "QFrame{border-bottom: 1px solid rgba(0, 0, 0, 50%);}\n" + f"QFrame:hover{{background-color : {MENU_SLOT_HOVER_CLR}}}\n" + "QLabel{background-color: transparent;}"
+CLICKED_STYLE = f"QFrame{{border-bottom: 1px solid rgba(0, 0, 0, 50%);background-color : {MENU_SLOT_CLICKED_CLR};}}\n" + f"QFrame:hover{{background-color : {MENU_SLOT_HOVER_CLICKED_CLR}}}\n" + "QLabel{background-color: transparent;}"
 class MenuSlot(QtWidgets.QFrame):
     clicked = QtCore.pyqtSignal(object)
     def __init__(self, parent, icon, label_text):
         super().__init__(parent)
         
-        self.setStyleSheet("QFrame{border-bottom: 1px solid rgba(0, 0, 0, 50%);}\n"
-                           "QFrame:hover{background-color : rgb(156, 156, 156)}\n"
-                           "QLabel{background-color: transparent;}")
+        if label_text == HOME_TXT:
+            self.setStyleSheet(CLICKED_STYLE)
+        else:
+            self.setStyleSheet(RGLR_STYLE)
         self.setObjectName("MenuSlot")
 
         # Horizontal layout for the icon and label
@@ -40,12 +44,8 @@ class MenuSlot(QtWidgets.QFrame):
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
             self.clicked.emit(self)
-            self.setStyleSheet("QFrame{border-bottom: 1px solid rgba(0, 0, 0, 50%);background-color : rgb(120, 120, 120);}\n"
-                           "QFrame:hover{background-color : rgb(156, 156, 156)}\n"
-                           "QLabel{background-color: transparent;}")
+            self.setStyleSheet(CLICKED_STYLE)
         
     
     def onLeave(self):
-        self.setStyleSheet("QFrame{border-bottom: 1px solid rgba(0, 0, 0, 50%);}\n"
-                           "QFrame:hover{background-color : rgb(156, 156, 156)}\n"
-                           "QLabel{background-color: transparent;}")
+        self.setStyleSheet(RGLR_STYLE)

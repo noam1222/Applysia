@@ -1,3 +1,7 @@
+HOME_TXT = "Home"
+REPORTS_TXT = "Reports"
+ANALYTICS_TXT = "Analytics"
+
 ICONS_PATH = "res/icons"
 IMGS_PATH = "res/imgs"
 

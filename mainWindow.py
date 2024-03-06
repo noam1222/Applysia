@@ -2,6 +2,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from widgets.menu.menu import Menu
 from widgets.home.homeWidget import HomeWidget
 
+from widgets.library.library import LibraryWidget
+from constants import *
+
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -35,11 +38,24 @@ class MainWindow(QtWidgets.QMainWindow):
         self.centralwidget = QtWidgets.QWidget(self)
         self.centralwidget.setObjectName("centralwidget")
 
-        self.menu = Menu(self.centralwidget)
+        self.menu = Menu(self.centralwidget, self.menuSlotClicked)
 
-        self.homeWidget = HomeWidget(self.centralwidget)
+        self.actionWindow = HomeWidget(self.centralwidget)
 
         self.setCentralWidget(self.centralwidget)
+
+    def menuSlotClicked(self, slotName):
+        if slotName == HOME_TXT:
+            self.actionWindow.hide()
+            self.actionWindow = HomeWidget(self.centralwidget)
+            self.actionWindow.show()
+        elif slotName == REPORTS_TXT:
+            self.actionWindow.hide()
+            self.actionWindow = LibraryWidget(self.centralwidget)
+            self.actionWindow.show()
+        elif slotName == ANALYTICS_TXT:
+            pass
+
 
     
 
@@ -48,6 +64,5 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     self = MainWindow()
-    # self.setupResponsiveness()
     self.show()
     sys.exit(app.exec_())
