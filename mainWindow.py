@@ -3,12 +3,14 @@ from widgets.menu.menu import Menu
 from widgets.home.homeWidget import HomeWidget
 
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
+class MainWindow(QtWidgets.QMainWindow):
+    def __init__(self):
+        super().__init__()
+
         # main window
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.setWindowTitle("APPLYSIA")
-        MainWindow.setFixedSize(1000, 750)
+        self.setObjectName("mainWindow")
+        self.setWindowTitle("APPLYSIA")
+        self.setFixedSize(1000, 750)
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
@@ -28,25 +30,24 @@ class Ui_MainWindow(object):
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
-        MainWindow.setPalette(palette)
+        self.setPalette(palette)
 
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget = QtWidgets.QWidget(self)
         self.centralwidget.setObjectName("centralwidget")
 
         self.menu = Menu(self.centralwidget)
 
         self.homeWidget = HomeWidget(self.centralwidget)
 
-        MainWindow.setCentralWidget(self.centralwidget)
+        self.setCentralWidget(self.centralwidget)
 
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+    
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
+    self = MainWindow()
+    # self.setupResponsiveness()
+    self.show()
     sys.exit(app.exec_())
