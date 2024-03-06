@@ -187,8 +187,9 @@ class HomeWidget(QtWidgets.QWidget):
         self.calendarWidget.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.Israel))
         self.calendarWidget.setStyleSheet("background-color: #F7B2AD;")
         self.calendarWidget.setVerticalHeaderFormat(QtWidgets.QCalendarWidget.NoVerticalHeader)
-        self.calendarWidget.activated.connect(self.dateChoosed)
+        self.calendarWidget.setMaximumDate(QtCore.QDate.currentDate())
         self.calendarWidget.setObjectName("calendarWidget")
+        self.calendarWidget.activated.connect(self.dateChoosed)
         self.calendarWidget.show()
 
     def dateChoosed(self, date):

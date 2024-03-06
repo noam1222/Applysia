@@ -17,6 +17,10 @@ class Headline(QtWidgets.QLabel):
         brush = QtGui.QBrush(QtGui.QColor(188, 67, 67))
         palette.setBrush(QtGui.QPalette.Active,
                          QtGui.QPalette.WindowText, brush)
+        palette.setBrush(QtGui.QPalette.Inactive,
+                         QtGui.QPalette.WindowText, brush)
+        palette.setBrush(QtGui.QPalette.Disabled,
+                         QtGui.QPalette.WindowText, brush)
         self.setPalette(palette)
         font = QtGui.QFont("Impact", 28, 50, False)
         self.setFont(font)
