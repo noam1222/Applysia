@@ -108,6 +108,11 @@ class HomeWidget(QtWidgets.QWidget):
         self.horizontalLayout_7.addWidget(self.timeLabel)
 
         self.timeEditText = TextEdit(self, "HH:MM", "timeEditText", readOnly=False)
+        # Regular expression for time format HH:MM
+        reg_exp = QtCore.QRegExp("^([01][0-9]|2[0-3]):[0-5][0-9]$")
+        validator = QtGui.QRegExpValidator(reg_exp, self)
+        self.timeEditText.setValidator(validator)
+        # self.timeEditText.focusOutEvent = self.timeTextEditFocusOut
         self.horizontalLayout_7.addWidget(self.timeEditText)
 
         self.timeToolBtn = ToolBtn(self, "time_icon.png", "timeToolBtn", onClick=self.setCurrentTime)
@@ -167,6 +172,7 @@ class HomeWidget(QtWidgets.QWidget):
                                       "border-radius: 5px;\n"
                                       "padding: 5px;")
         self.analyzeBtn.setObjectName("analyzeBtn")
+        self.analyzeBtn.clicked.connect(self.analyzeBtnClicked)
         self.verticalLayout_2.addWidget(self.analyzeBtn)
         
         self.horizontalLayout_4.addLayout(self.verticalLayout_2)
@@ -192,3 +198,13 @@ class HomeWidget(QtWidgets.QWidget):
     def setCurrentTime(self):
         current_time = datetime.now().strftime("%H:%M")
         self.timeEditText.setText(current_time)
+
+    def analyzeBtnClicked(self):
+        # check for correct date input
+        if self.dateTextEdit.text() == "":
+            QtWidgets.QMessageBox.warning(self, "Invalid Date", "Please enter a valid date (use the calendar icon)")
+            return
+        # check for correct time input
+        if not self.timeEditText.validator().regExp().exactMatch(self.timeEditText.text()):
+            QtWidgets.QMessageBox.warning(self, "Invalid Time", "Please enter a valid time in the format HH:MM.")
+            return
