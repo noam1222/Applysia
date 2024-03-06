@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 from .components import *
 from constants import *
+from datetime import datetime
 
 class HomeWidget(QtWidgets.QWidget):
     def __init__(self, parent):
@@ -88,7 +89,7 @@ class HomeWidget(QtWidgets.QWidget):
         self.dateTextEdit = TextEdit(self, "DD/MM/YY", "dateTextEdit")
         self.horizontalLayout_6.addWidget(self.dateTextEdit)
 
-        self.dateToolBtn = ToolBtn(self, "date_icon.png", "dateToolBtn")
+        self.dateToolBtn = ToolBtn(self, "date_icon.png", "dateToolBtn", onClick=self.showCalendar)
         self.horizontalLayout_6.addWidget(self.dateToolBtn)
 
         spacerItem5 = QtWidgets.QSpacerItem(
@@ -106,10 +107,10 @@ class HomeWidget(QtWidgets.QWidget):
         self.timeLabel = SubHeadline(self, "Time:", "timeLabel")
         self.horizontalLayout_7.addWidget(self.timeLabel)
 
-        self.timeEditText = TextEdit(self, "HH:MM", "timeEditText")
+        self.timeEditText = TextEdit(self, "HH:MM", "timeEditText", readOnly=False)
         self.horizontalLayout_7.addWidget(self.timeEditText)
 
-        self.timeToolBtn = ToolBtn(self, "time_icon.png", "timeToolBtn")
+        self.timeToolBtn = ToolBtn(self, "time_icon.png", "timeToolBtn", onClick=self.setCurrentTime)
         self.horizontalLayout_7.addWidget(self.timeToolBtn)
 
         spacerItem7 = QtWidgets.QSpacerItem(
@@ -173,3 +174,21 @@ class HomeWidget(QtWidgets.QWidget):
         spacerItem10 = QtWidgets.QSpacerItem(
             40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_4.addItem(spacerItem10)
+
+    def showCalendar(self):
+        self.calendarWidget = QtWidgets.QCalendarWidget(self.parent())
+        self.calendarWidget.setGeometry(QtCore.QRect(250, 300, 391, 241))
+        self.calendarWidget.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.Israel))
+        self.calendarWidget.setStyleSheet("background-color: #F7B2AD;")
+        self.calendarWidget.setVerticalHeaderFormat(QtWidgets.QCalendarWidget.NoVerticalHeader)
+        self.calendarWidget.activated.connect(self.dateChoosed)
+        self.calendarWidget.setObjectName("calendarWidget")
+        self.calendarWidget.show()
+
+    def dateChoosed(self, date):
+        self.dateTextEdit.setText(date.toString("dd/MM/yy"))
+        self.calendarWidget.hide()
+
+    def setCurrentTime(self):
+        current_time = datetime.now().strftime("%H:%M")
+        self.timeEditText.setText(current_time)

@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets
 
 
 class TextEdit(QtWidgets.QLineEdit):
-    def __init__(self, parent, placeholder, name):
+    def __init__(self, parent, placeholder, name, readOnly=True):
         super().__init__(parent)
 
         self.setStyleSheet(
@@ -11,4 +11,5 @@ class TextEdit(QtWidgets.QLineEdit):
             "margin-left: 5px;")
         self.setText("")
         self.setPlaceholderText(placeholder)
+        self.setReadOnly(readOnly)
         self.setObjectName(name)
