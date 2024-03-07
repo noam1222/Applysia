@@ -7,6 +7,8 @@ class HomeWidget(QtWidgets.QWidget):
     def __init__(self, parent):
         super(HomeWidget, self).__init__(parent)
 
+        self.filePath = None
+
         self.setGeometry(QtCore.QRect(280, -30, 721, 761))
         self.setObjectName("HomeWidget")
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(
@@ -68,6 +70,7 @@ class HomeWidget(QtWidgets.QWidget):
                                           "color: white;\n"
                                           "border-radius: 5px;\n"
                                           "padding: 5px;")
+        self.chooseVideoBtn.clicked.connect(self.openFileDialog)
         self.chooseVideoBtn.setObjectName("chooseVideoBtn")
         self.horizontalLayout_5.addWidget(self.chooseVideoBtn)
 
@@ -89,7 +92,7 @@ class HomeWidget(QtWidgets.QWidget):
         self.dateTextEdit = TextEdit(self, "DD/MM/YY", "dateTextEdit")
         self.horizontalLayout_6.addWidget(self.dateTextEdit)
 
-        self.dateToolBtn = ToolBtn(self, "date_icon.png", "dateToolBtn", onClick=self.showCalendar)
+        self.dateToolBtn = ToolBtn(self, "date_icon.png", "dateToolBtn", "Choose date", onClick=self.showCalendar)
         self.horizontalLayout_6.addWidget(self.dateToolBtn)
 
         spacerItem5 = QtWidgets.QSpacerItem(
@@ -115,7 +118,7 @@ class HomeWidget(QtWidgets.QWidget):
         # self.timeEditText.focusOutEvent = self.timeTextEditFocusOut
         self.horizontalLayout_7.addWidget(self.timeEditText)
 
-        self.timeToolBtn = ToolBtn(self, "time_icon.png", "timeToolBtn", onClick=self.setCurrentTime)
+        self.timeToolBtn = ToolBtn(self, "time_icon.png", "timeToolBtn", "Current time", onClick=self.setCurrentTime)
         self.horizontalLayout_7.addWidget(self.timeToolBtn)
 
         spacerItem7 = QtWidgets.QSpacerItem(
@@ -181,13 +184,31 @@ class HomeWidget(QtWidgets.QWidget):
             40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_4.addItem(spacerItem10)
 
+    def openFileDialog(self):
+        options = QtWidgets.QFileDialog.Options()
+        filePath, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Choose Video", "", "Video Files (*.mp4 *.avi *.mov)", options=options)
+        if not filePath:
+            return
+        self.filePath = filePath
+        videoName = filePath.split('/')[-1]
+        self.chooseVideoBtn.setText(videoName)
+
     def showCalendar(self):
         self.calendarWidget = QtWidgets.QCalendarWidget(self.parent())
-        self.calendarWidget.setGeometry(QtCore.QRect(250, 300, 391, 241))
+        self.calendarWidget.setGeometry(QtCore.QRect(350, 275, 391, 241))
         self.calendarWidget.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.Israel))
-        self.calendarWidget.setStyleSheet("background-color: #F7B2AD;")
+        self.calendarWidget.setStyleSheet("background-color: lightblue;")
         self.calendarWidget.setVerticalHeaderFormat(QtWidgets.QCalendarWidget.NoVerticalHeader)
-        self.calendarWidget.setMaximumDate(QtCore.QDate.currentDate())
+        
+        # Disable future dates
+        current_date = QtCore.QDate.currentDate()
+        self.calendarWidget.setMaximumDate(current_date)
+        future_date_format = QtGui.QTextCharFormat()
+        future_date_format.setForeground(QtCore.Qt.gray)
+        for offset in range(1, 32):
+            future_date = current_date.addDays(offset)
+            self.calendarWidget.setDateTextFormat(future_date, future_date_format)
+
         self.calendarWidget.setObjectName("calendarWidget")
         self.calendarWidget.activated.connect(self.dateChoosed)
         self.calendarWidget.show()
@@ -208,4 +229,8 @@ class HomeWidget(QtWidgets.QWidget):
         # check for correct time input
         if not self.timeEditText.validator().regExp().exactMatch(self.timeEditText.text()):
             QtWidgets.QMessageBox.warning(self, "Invalid Time", "Please enter a valid time in the format HH:MM.")
+            return
+        # check if user choose video
+        if not self.filePath:
+            QtWidgets.QMessageBox.warning(self, "Invalid Video", "Please Choose video.")
             return

@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from constants import getIconPath
 
 class ToolBtn(QtWidgets.QToolButton):
-    def __init__(self, parent, icon, name, onClick):
+    def __init__(self, parent, icon, name, toolTipText, onClick):
         super().__init__(parent)
 
         self.setStyleSheet("background-color: transparent;")
@@ -11,6 +11,7 @@ class ToolBtn(QtWidgets.QToolButton):
                         QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setIcon(icon1)
         self.setIconSize(QtCore.QSize(50, 50))
+        self.setToolTip(toolTipText)
         self.setObjectName(name)
 
         self.clicked.connect(onClick)
