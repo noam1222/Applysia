@@ -4,7 +4,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_ReportWidget(object):
     def setupUi(self, ReportWidget):
         ReportWidget.setObjectName("ReportWidget")
-        ReportWidget.resize(721, 761)
+        ReportWidget.setFixedSize(721, 761)
 
         self.verticalLayoutWidget = QtWidgets.QWidget(ReportWidget)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 0, 721, 761))
@@ -16,9 +16,9 @@ class Ui_ReportWidget(object):
         # Headline
         self.headLineHorizontalLayout = QtWidgets.QHBoxLayout()
         self.headLineHorizontalLayout.setSizeConstraint(QtWidgets.QLayout.SetFixedSize)
-        self.headLineHorizontalLayout.setContentsMargins(6, -1, 6, -1)
+        self.headLineHorizontalLayout.setContentsMargins(6, -1, 6, 0)
         self.headLineHorizontalLayout.setObjectName("headLineHorizontalLayout")
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(40, -1, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.headLineHorizontalLayout.addItem(spacerItem)
         self.headlineLabel = QtWidgets.QLabel(self.verticalLayoutWidget)
         font = QtGui.QFont()
@@ -27,14 +27,16 @@ class Ui_ReportWidget(object):
         self.headlineLabel.setFont(font)
         self.headlineLabel.setObjectName("headlineLabel")
         self.headLineHorizontalLayout.addWidget(self.headlineLabel)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(40, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.headLineHorizontalLayout.addItem(spacerItem1)
         self.mainVerticalLayout.addLayout(self.headLineHorizontalLayout)
 
-        # Date label
-        self.dateHorizontalLayout = QtWidgets.QHBoxLayout()
-        self.dateHorizontalLayout.setContentsMargins(20, -1, 6, -1)
-        self.dateHorizontalLayout.setObjectName("dateHorizontalLayout")
+        # Info line
+        self.infoHorizontalLayout = QtWidgets.QHBoxLayout()
+        self.infoHorizontalLayout.setContentsMargins(20, -1, 6, -1)
+        self.infoHorizontalLayout.setObjectName("dateHorizontalLayout")
+        spacerItem4 = QtWidgets.QSpacerItem(40, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.infoHorizontalLayout.addItem(spacerItem4)
         self.dateLabel = QtWidgets.QLabel(self.verticalLayoutWidget)
         font = QtGui.QFont()
         font.setFamily("Narkisim")
@@ -43,13 +45,10 @@ class Ui_ReportWidget(object):
         font.setWeight(75)
         self.dateLabel.setFont(font)
         self.dateLabel.setObjectName("dateLabel")
-        self.dateHorizontalLayout.addWidget(self.dateLabel)
-        self.mainVerticalLayout.addLayout(self.dateHorizontalLayout)
-
-        # Applysia combo box chooser
-        self.applysiaChooseHorizontalLayout = QtWidgets.QHBoxLayout()
-        self.applysiaChooseHorizontalLayout.setContentsMargins(20, -1, 6, -1)
-        self.applysiaChooseHorizontalLayout.setObjectName("applysiaChooseHorizontalLayout")
+        self.infoHorizontalLayout.addWidget(self.dateLabel)
+        spacerItem3 = QtWidgets.QSpacerItem(40, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.infoHorizontalLayout.addItem(spacerItem3)
+        
         self.ApplysiaToShowLabel = QtWidgets.QLabel(self.verticalLayoutWidget)
         font = QtGui.QFont()
         font.setFamily("Narkisim")
@@ -58,7 +57,7 @@ class Ui_ReportWidget(object):
         font.setWeight(75)
         self.ApplysiaToShowLabel.setFont(font)
         self.ApplysiaToShowLabel.setObjectName("ApplysiaToShowLabel")
-        self.applysiaChooseHorizontalLayout.addWidget(self.ApplysiaToShowLabel)
+        self.infoHorizontalLayout.addWidget(self.ApplysiaToShowLabel)
         self.ApplysiaToShowComboBox = QtWidgets.QComboBox(self.verticalLayoutWidget)
         self.ApplysiaToShowComboBox.setStyleSheet("border-radius: 10px;\n"
 "background: white;\n"
@@ -75,12 +74,12 @@ class Ui_ReportWidget(object):
         self.ApplysiaToShowComboBox.addItem("")
         self.ApplysiaToShowComboBox.addItem("")
         self.ApplysiaToShowComboBox.addItem("")
-        self.applysiaChooseHorizontalLayout.addWidget(self.ApplysiaToShowComboBox)
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.applysiaChooseHorizontalLayout.addItem(spacerItem2)
-        self.mainVerticalLayout.addLayout(self.applysiaChooseHorizontalLayout)
+        self.infoHorizontalLayout.addWidget(self.ApplysiaToShowComboBox)
+        spacerItem2 = QtWidgets.QSpacerItem(40, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.infoHorizontalLayout.addItem(spacerItem2)
+        self.mainVerticalLayout.addLayout(self.infoHorizontalLayout)
 
-        # movement table
+        # Movement table
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setContentsMargins(-1, -1, 0, -1)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
@@ -147,13 +146,42 @@ class Ui_ReportWidget(object):
         self.tableWidget.verticalHeader().setSortIndicatorShown(False)
         self.tableWidget.verticalHeader().setStretchLastSection(False)
         self.horizontalLayout_2.addWidget(self.tableWidget)
+        self.mainVerticalLayout.addLayout(self.horizontalLayout_2)
+
+        # Draw canvas
+        self.drawerHorizontalLayout = QtWidgets.QHBoxLayout()
+        self.drawerHorizontalLayout.setContentsMargins(20, -1, 20, -1)
+        self.drawerHorizontalLayout.setObjectName("drawHorizontalLayout")
+
+        pixmap = QtGui.QPixmap(680, 250)
+        pixmap.fill(QtCore.Qt.white)
+        painter = QtGui.QPainter(pixmap)
+        pen = QtGui.QPen(QtCore.Qt.black, 2, QtCore.Qt.SolidLine)
+        painter.setPen(pen)
+        # Divide horizontally
+        painter.drawLine(0, 83, 680, 83)
+        painter.drawLine(0, 166, 680, 166)
+        # Divide vertically
+        painter.drawLine(136, 0, 136, 250)
+        painter.drawLine(272, 0, 272, 250)
+        painter.drawLine(408, 0, 408, 250)
+        painter.drawLine(544, 0, 544, 250)
+        painter.end()
+
+        self.canvas = QtWidgets.QLabel()
+        self.canvas.setScaledContents(True)
+        self.canvas.setAlignment(QtCore.Qt.AlignCenter)
+        self.canvas.setPixmap(pixmap)
+
+        self.drawerHorizontalLayout.addWidget(self.canvas)
+        self.mainVerticalLayout.addLayout(self.drawerHorizontalLayout)
 
         # Export
-        self.mainVerticalLayout.addLayout(self.horizontalLayout_2)
         self.exportHorizontalLayout = QtWidgets.QHBoxLayout()
-        self.exportHorizontalLayout.setContentsMargins(20, 50, 20, 50)
+        self.exportHorizontalLayout.setContentsMargins(20, 20, 20, 30)
         self.exportHorizontalLayout.setSpacing(6)
         self.exportHorizontalLayout.setObjectName("exportHorizontalLayout")
+
         self.exportExcel = QtWidgets.QFrame(self.verticalLayoutWidget)
         self.exportExcel.setStyleSheet("background: rgba(152, 113, 113, 150);\n"
 "border-radius: 10px 10px 10px 10px;")
@@ -190,7 +218,7 @@ class Ui_ReportWidget(object):
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.exportWord)
         self.horizontalLayout_4.setContentsMargins(-1, 5, 7, -1)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem5 = QtWidgets.QSpacerItem(40, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_4.addItem(spacerItem5)
         self.label_7 = QtWidgets.QLabel(self.exportWord)
         self.label_7.setStyleSheet("background: transparent;")
@@ -208,7 +236,7 @@ class Ui_ReportWidget(object):
         self.label_8.setStyleSheet("background: transparent;")
         self.label_8.setObjectName("label_8")
         self.horizontalLayout_4.addWidget(self.label_8)
-        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem6 = QtWidgets.QSpacerItem(40, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_4.addItem(spacerItem6)
         self.exportHorizontalLayout.addWidget(self.exportWord)
 
@@ -217,7 +245,7 @@ class Ui_ReportWidget(object):
 "border-radius: 10px 10px 10px 10px;")
         self.exportVideo.setObjectName("exportVideo")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.exportVideo)
-        self.horizontalLayout.setContentsMargins(-1, 1, 7, -1)
+        self.horizontalLayout.setContentsMargins(-1, 7, 7, -1)
         self.horizontalLayout.setObjectName("horizontalLayout")
         spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem7)
