@@ -166,8 +166,21 @@ class Ui_ReportWidget(object):
         painter.drawLine(272, 0, 272, 250)
         painter.drawLine(408, 0, 408, 250)
         painter.drawLine(544, 0, 544, 250)
+        # Draw applysia's numbers
+        i = 1
+        for y in (0, 83, 166):
+              for x in (0, 136, 272, 408, 544):
+                        rect = QtCore.QRect(x, y, 15, 23)
+                        painter.setBrush(QtGui.QColor(198, 190, 190, 54))
+                        painter.setPen(QtGui.QColor(0, 0, 0, 100))
+                        painter.drawRect(rect)
+                        painter.setBrush(QtCore.Qt.NoBrush)
+                        painter.setPen(QtCore.Qt.black)
+                        painter.drawText(rect, QtCore.Qt.AlignCenter | QtCore.Qt.TextWordWrap, str(i))
+                        i += 1          
+                        
         painter.end()
-
+              
         self.canvas = QtWidgets.QLabel()
         self.canvas.setScaledContents(True)
         self.canvas.setAlignment(QtCore.Qt.AlignCenter)
@@ -300,11 +313,11 @@ class Ui_ReportWidget(object):
         __sortingEnabled = self.tableWidget.isSortingEnabled()
         self.tableWidget.setSortingEnabled(False)
         item = self.tableWidget.item(0, 0)
-        item.setText(_translate("ReportWidget", "Period"))
+        item.setText(_translate("ReportWidget", "Time"))
         item = self.tableWidget.item(0, 1)
         item.setText(_translate("ReportWidget", "Movement"))
         item = self.tableWidget.item(0, 2)
-        item.setText(_translate("ReportWidget", "Period"))
+        item.setText(_translate("ReportWidget", "Time"))
         item = self.tableWidget.item(0, 3)
         item.setText(_translate("ReportWidget", "Movement"))
         self.tableWidget.setSortingEnabled(__sortingEnabled)
