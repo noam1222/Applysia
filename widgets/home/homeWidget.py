@@ -219,7 +219,7 @@ class HomeWidget(QtWidgets.QWidget):
 
     def setCurrentTime(self):
         current_time = datetime.now().strftime("%H:%M")
-        self.timeEditText.setText(current_time)
+        self.timeEditText.setText(current_time[0:3] + "00")
 
     def analyzeBtnClicked(self):
         # check for correct date input
