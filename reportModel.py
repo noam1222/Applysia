@@ -1,6 +1,6 @@
 from mongoengine import Document, fields, connect
 
-connect("applysias")
+connect(db="applysias", host="mongodb://localhost:27017/")
 
 
 # Define the Report document
