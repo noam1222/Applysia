@@ -1,5 +1,6 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 from constants import *
+from widgets.home.components.toolBtn import ToolBtn
 
 class LibraryWidget(QtWidgets.QWidget):
     def __init__(self, parent):
@@ -40,7 +41,6 @@ class LibraryWidget(QtWidgets.QWidget):
         font = QtGui.QFont()
         font.setPointSize(10)
         font.setBold(False)
-        font.setItalic(True)
         font.setWeight(50)
         self.treeWidget.setFont(font)
         self.treeWidget.setAllColumnsShowFocus(False)
@@ -75,7 +75,6 @@ class LibraryWidget(QtWidgets.QWidget):
         font = QtGui.QFont()
         font.setPointSize(10)
         font.setBold(False)
-        font.setItalic(True)
         font.setWeight(50)
         self.treeWidget_2.setFont(font)
         self.treeWidget_2.setAllColumnsShowFocus(False)
@@ -101,6 +100,7 @@ class LibraryWidget(QtWidgets.QWidget):
         self.horizontalLayout.addWidget(self.treeWidget_2)
 
         # filter Vertical layout
+        #TODO fix decoration
         self.filterVerticalLayout = QtWidgets.QVBoxLayout()
         self.filterVerticalLayout.setSpacing(15)
         self.filterVerticalLayout.setObjectName("filterVerticalLayout")
@@ -114,6 +114,16 @@ class LibraryWidget(QtWidgets.QWidget):
         self.filtersHeadlineLabel.setFont(font)
         self.filtersHeadlineLabel.setObjectName("filtersHeadlineLabel")
         self.filterVerticalLayout.addWidget(self.filtersHeadlineLabel, 0, QtCore.Qt.AlignHCenter)
+        
+        #decoratin line
+        self.line = QtWidgets.QFrame(self)
+        self.line.setGeometry(QtCore.QRect(60, 80, 191, 16))
+        self.line.setObjectName("line")
+        self.line.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line.setStyleSheet("background-color: lightgray;")
+        self.filterVerticalLayout.addWidget(self.line)
+
         #date filter
         self.dateFilter = QtWidgets.QHBoxLayout()
         self.dateFilter.setContentsMargins(-1, 0, -1, -1)
@@ -127,15 +137,17 @@ class LibraryWidget(QtWidgets.QWidget):
         self.label_4.setFont(font)
         self.label_4.setObjectName("label_4")
         self.dateFilter.addWidget(self.label_4)
+
         self.dateEditFilter = QtWidgets.QDateEdit(self.verticalLayoutWidget)
         self.dateEditFilter.setObjectName("dateEditFilter")
+        current_date = QtCore.QDate.currentDate()
+        self.dateEditFilter.setDate(current_date)
+        self.dateEditFilter.setMaximumDate(current_date)
         self.dateFilter.addWidget(self.dateEditFilter)
-        self.label_5 = QtWidgets.QLabel(self.verticalLayoutWidget)
-        self.label_5.setMaximumSize(QtCore.QSize(50, 45))
-        self.label_5.setText("")
-        self.label_5.setPixmap(QtGui.QPixmap(getIconPath("date_icon.png")))
-        self.label_5.setObjectName("label_5")
-        self.dateFilter.addWidget(self.label_5)
+
+        self.dateIconPicker = ToolBtn(self, "date_icon.png", "dateIconPicker", "Choose date", onClick=self.showCalendar)
+        self.dateFilter.addWidget(self.dateIconPicker)
+
         self.filterVerticalLayout.addLayout(self.dateFilter)
         #time Filter
         self.timeFilterHL = QtWidgets.QHBoxLayout()
@@ -153,6 +165,7 @@ class LibraryWidget(QtWidgets.QWidget):
         self.timeEditFilterStart.setButtonSymbols(QtWidgets.QAbstractSpinBox.UpDownArrows)
         self.timeEditFilterStart.setAccelerated(False)
         self.timeEditFilterStart.setObjectName("timeEditFilterStart")
+        #TODO cahnge minutes to only get 00
         self.timeFilterHL.addWidget(self.timeEditFilterStart)
         self.label_3 = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.label_3.setStyleSheet("")
@@ -162,6 +175,7 @@ class LibraryWidget(QtWidgets.QWidget):
         self.timeEditFilterEnd = QtWidgets.QTimeEdit(self.verticalLayoutWidget)
         self.timeEditFilterEnd.setCalendarPopup(False)
         self.timeEditFilterEnd.setObjectName("timeEditFilterEnd")
+        #TODO cahnge minutes to only get 00
         self.timeFilterHL.addWidget(self.timeEditFilterEnd)
         self.filterVerticalLayout.addLayout(self.timeFilterHL)
         #movement filter
@@ -253,3 +267,27 @@ class LibraryWidget(QtWidgets.QWidget):
         self.comboBoxLEQorBEQ.setItemText(0, _translate("LibraryWindow", "More than"))
         self.comboBoxLEQorBEQ.setItemText(1, _translate("LibraryWindow", "Less than"))
         self.FilterBtn.setText(_translate("LibraryWindow", "Filter"))
+
+    def showCalendar(self):
+        self.calendarWidget = QtWidgets.QCalendarWidget(self.parent())
+        self.calendarWidget.setGeometry(QtCore.QRect(350, 275, 391, 241))
+        self.calendarWidget.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.Israel))
+        self.calendarWidget.setStyleSheet("background-color: lightblue;")
+        self.calendarWidget.setVerticalHeaderFormat(QtWidgets.QCalendarWidget.NoVerticalHeader)
+        
+        # Disable future dates
+        current_date = QtCore.QDate.currentDate()
+        self.calendarWidget.setMaximumDate(current_date)
+        future_date_format = QtGui.QTextCharFormat()
+        future_date_format.setForeground(QtCore.Qt.gray)
+        for offset in range(1, 32):
+            future_date = current_date.addDays(offset)
+            self.calendarWidget.setDateTextFormat(future_date, future_date_format)
+
+        self.calendarWidget.setObjectName("calendarWidget")
+        self.calendarWidget.activated.connect(self.dateChoosed)
+        self.calendarWidget.show()
+
+    def dateChoosed(self, date):
+        self.dateEditFilter.setDate(date)
+        self.calendarWidget.hide()

@@ -48,6 +48,8 @@ class Ui_ReportWidget(object):
         self.infoHorizontalLayout.addWidget(self.dateLabel)
         spacerItem3 = QtWidgets.QSpacerItem(40, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.infoHorizontalLayout.addItem(spacerItem3)
+
+        #TODO add total movemnt label
         
         self.ApplysiaToShowLabel = QtWidgets.QLabel(self.verticalLayoutWidget)
         font = QtGui.QFont()
@@ -149,6 +151,7 @@ class Ui_ReportWidget(object):
         self.mainVerticalLayout.addLayout(self.horizontalLayout_2)
 
         # Draw canvas
+        #TODO draw
         self.drawerHorizontalLayout = QtWidgets.QHBoxLayout()
         self.drawerHorizontalLayout.setContentsMargins(20, -1, 20, -1)
         self.drawerHorizontalLayout.setObjectName("drawHorizontalLayout")
