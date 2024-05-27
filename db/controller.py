@@ -26,10 +26,17 @@ def get_all_reports():
 # receives 2 strings as input representing date + time, returns cursor
 def get_report_by_date_and_time(date, time):
     reports = Report.objects(date=date, time=time).order_by('applysia')
-    return [report.to_mongo().to_dict() for report in reports]
+
+    average_report = get_average_report_of_all(date, time)
+
+    reports_list = [report.to_mongo().to_dict() for report in reports]
+
+    reports_list.insert(0, average_report)
+
+    return reports_list
 
 def get_filtered_reports(date, start, end, movement, geq):
-    #TODO order by applysia
+
     """first filter reports by given date"""
     reports = Report.objects(date=date)
 
@@ -43,7 +50,10 @@ def get_filtered_reports(date, start, end, movement, geq):
         reports = reports.filter(movement__lte=movement)
 
     #TODO add all
+    """sort by applysia num"""
+    reports = reports.order_by('applysia')
 
+    av_report = get_average_report_of_all()
     return [report.to_mongo().to_dict() for report in reports]
 
 
@@ -66,8 +76,12 @@ def get_report_by_applysnum(num):
     return [report.to_mongo().to_dict() for report in reports]
 
 # return reports that is an average of ALL aplysias
-def get_average_report_of_all(date, time):
-    reports = get_report_by_date_and_time(date, time)
+def get_average_report_of_all(date, time, end_time=None):
+    if end_time:
+        reports = Report.objects(date=date)
+        reports = reports.filter(time__gte=time, time__lte=end_time)
+    else:
+        reports = get_report_by_date_and_time(date, time)
 
     if not reports:
         return json.dumps({})
@@ -96,6 +110,7 @@ def get_average_report_of_all(date, time):
         "date": date,
         "time": time,
         "movement": average_movement,
+        "applysia": 0,
         "trail_points": trail_points,
         "movement_every_five_min": average_movement_every_five_min
     }
