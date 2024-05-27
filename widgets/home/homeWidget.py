@@ -233,19 +233,18 @@ class HomeWidget(QtWidgets.QWidget):
             self.timeEditText.blockSignals(False)
 
     def analyzeBtnClicked(self):
-        # TODO return checking
-        # # check for correct date input
-        # if self.dateTextEdit.text() == "":
-        #     QtWidgets.QMessageBox.warning(self, "Invalid Date", "Please enter a valid date (use the calendar icon)")
-        #     return
-        # # check for correct time input
-        # if not self.timeEditText.validator().regExp().exactMatch(self.timeEditText.text()):
-        #     QtWidgets.QMessageBox.warning(self, "Invalid Time", "Please enter a valid time in the format HH:MM.")
-        #     return
-        # # check if user choose video
-        # if not self.filePath:
-        #     QtWidgets.QMessageBox.warning(self, "Invalid Video", "Please Choose video.")
-        #     return
+        # check for correct date input
+        if self.dateTextEdit.text() == "":
+            QtWidgets.QMessageBox.warning(self, "Invalid Date", "Please enter a valid date (use the calendar icon)")
+            return
+        # check for correct time input
+        if not self.timeEditText.validator().regExp().exactMatch(self.timeEditText.text()):
+            QtWidgets.QMessageBox.warning(self, "Invalid Time", "Please enter a valid time in the format HH:MM.")
+            return
+        # check if user choose video
+        if not self.filePath:
+            QtWidgets.QMessageBox.warning(self, "Invalid Video", "Please Choose video.")
+            return
         self.ReportWidget = QtWidgets.QWidget()
         ui = Ui_ReportWidget()
         ui.setupUi(self.ReportWidget)
