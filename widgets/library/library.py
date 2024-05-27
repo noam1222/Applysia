@@ -3,8 +3,9 @@ from datetime import datetime
 
 from constants import *
 from widgets.home.components.toolBtn import ToolBtn
+from widgets.report.report import *
 
-from db.controller import get_filtered_reports
+from db.controller import get_filtered_reports, get_report_by_date_and_time
 
 
 class LibraryWidget(QtWidgets.QWidget):
@@ -38,6 +39,7 @@ class LibraryWidget(QtWidgets.QWidget):
 
         # first tree: All, 1-5
         self.treeWidget = QtWidgets.QTreeWidget(self.verticalLayoutWidget)
+        self.treeWidget.itemClicked.connect(lambda item, col: self.open_report(item.text(col), item.parent().text(col)))
         self.treeWidget.setStyleSheet("""
             background-color: #FFFDD0;  /* Cream color */
             border-top-left-radius: 10px;
@@ -68,6 +70,7 @@ class LibraryWidget(QtWidgets.QWidget):
 
         # tree 2: 6-12
         self.treeWidget_2 = QtWidgets.QTreeWidget(self.verticalLayoutWidget)
+        self.treeWidget_2.itemClicked.connect(lambda item, col: self.open_report(item.text(col), item.parent().text(col)))
         self.treeWidget_2.setStyleSheet("""
             background-color: #FFFDD0;  /* Cream color */
             border-top-left-radius: 10px;
@@ -297,6 +300,23 @@ class LibraryWidget(QtWidgets.QWidget):
         self.dateEditFilter.setDate(date)
         self.calendarWidget.hide()
 
+    def open_report(self, text, parent_text):
+        if parent_text == "All":
+            app = 0
+        else:
+            if parent_text[-2] == '1':
+                app = int(parent_text[-2:])
+            else:
+                app = int(parent_text[-1])
+
+        reports = get_report_by_date_and_time(self.curr_date, text)
+        app = [r[APPLYSIA_DB] for r in reports].index(app)
+        # open the report
+        self.ReportWidget = QtWidgets.QWidget()
+        ui = Ui_ReportWidget()
+        ui.setupUi(self.ReportWidget, reports, current_aplysia=app)
+        self.ReportWidget.show()
+
     def filter(self):
         date = self.dateEditFilter.text()
         time_start = self.timeEditFilterStart.text()
@@ -308,6 +328,7 @@ class LibraryWidget(QtWidgets.QWidget):
         date_obj = datetime.strptime(date, "%d/%m/%Y")
         formatted_date = date_obj.strftime("%d/%m/%y")
         date = str(formatted_date)
+        self.curr_date = date
 
         # check correct time input
         time_obj1 = datetime.strptime(time_start, "%H:%M")

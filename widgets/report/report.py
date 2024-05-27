@@ -5,15 +5,12 @@ from constants import *
 
 
 class Ui_ReportWidget(object):
-    def setupUi(self, ReportWidget, reports):
+    def setupUi(self, ReportWidget, reports, current_aplysia=0):
         ReportWidget.setObjectName("ReportWidget")
         ReportWidget.setFixedSize(721, 761)
 
         self.reports = reports
-        print(len(self.reports))
-        for r in reports:
-            print(r[APPLYSIA_DB])
-        self.curr_app = 0
+        self.curr_app = current_aplysia
 
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(255, 253, 208))
@@ -121,6 +118,7 @@ class Ui_ReportWidget(object):
                     self.ApplysiaToShowComboBox.addItem(str(report[APPLYSIA_DB]))
         self.infoHorizontalLayout.addWidget(self.ApplysiaToShowComboBox)
         self.ApplysiaToShowComboBox.currentIndexChanged.connect(lambda index: self.app_index_changed(index))
+
         spacerItem2 = QtWidgets.QSpacerItem(
             40, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.infoHorizontalLayout.addItem(spacerItem2)
@@ -199,7 +197,10 @@ class Ui_ReportWidget(object):
                 item.setFont(font)
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
                 self.tableWidget.setItem(i, j, item)
-        self.set_movement5()
+        if self.curr_app != 0:
+            self.ApplysiaToShowComboBox.setCurrentIndex(self.curr_app)
+        else:
+            self.set_movement5()
 
         self.tableWidget.horizontalHeader().setVisible(False)
         self.tableWidget.horizontalHeader().setCascadingSectionResizes(False)
@@ -367,7 +368,7 @@ class Ui_ReportWidget(object):
         self.dateLabel.setText(_translate(
             "ReportWidget", f"Date: {self.reports[0][DATE_DB]}"))
         self.movementLabel.setText(_translate(
-            "ReportWidget", f"Movement: {self.reports[0][MOVEMENT_DB]:.2f}"))
+            "ReportWidget", f"Movement: {self.reports[self.curr_app][MOVEMENT_DB]:.2f}"))
         self.ApplysiaToShowLabel.setText(
             _translate("ReportWidget", "Applysia:"))
 
