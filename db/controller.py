@@ -1,5 +1,5 @@
 import json
-from reportModel import Report
+from .reportModel import Report
 from mongoengine import connect
 import matplotlib.pyplot as plt
 
@@ -18,36 +18,36 @@ def add_report(date, time, movement, applysia, trail_points, movement_array):
 
 #print(add_report("afafafaf", "test2", 4.5, 2, [{'x': 1, 'y': 2}, {'x': 3, 'y': 4}, {'x': 5, 'y': 6}]))
 
-# returns cursor with all reports, to access individually iterate over cursor
 def get_all_reports():
+    """returns cursor with all reports, to access individually iterate over cursor"""
     reports = Report.objects()
     return [report.to_mongo().to_dict() for report in reports]
 
-# receives 2 strings as input representing date + time, returns cursor
 def get_report_by_date_and_time(date, time):
+    """receives 2 strings as input representing date + time, returns cursor"""
     reports = Report.objects(date=date, time=time)
     return [report.to_mongo().to_dict() for report in reports]
 
 
-# receives string input representing wanted date, returns cursor
 def get_report_by_date(date):
+    """receives string input representing wanted date, returns cursor"""
     reports = Report.objects(date=date)
     return [report.to_mongo().to_dict() for report in reports]
 
 
-# receives string! input representing wanted time
 def get_report_by_time(time):
+    """receives string! input representing wanted time"""
     reports = Report.objects(time=time)
     return [report.to_mongo().to_dict() for report in reports]
 
 
-# receives int!, returns info on wanted applysia
 def get_report_by_applysnum(num):
+    """receives int!, returns info on wanted applysia"""
     reports = Report.objects(applysia=num)
     return [report.to_mongo().to_dict() for report in reports]
 
-# return reports that is an average of ALL aplysias
 def get_average_report_of_all(date, time):
+    """receives int!, returns info on wanted applysia"""
     reports = get_report_by_date_and_time(date, time)
 
     if not reports:
@@ -89,8 +89,8 @@ def delete_reports_by_date(date):
     reports_to_delete.delete()
 
 
-# returns num of deleted items, deletes all reports of applysia #num
 def delete_reports_by_applysia(num):
+    """returns num of deleted items, deletes all reports of applysia #num"""
     reports_to_delete = Report.objects(applysia=num)
     reports_to_delete.delete()
 

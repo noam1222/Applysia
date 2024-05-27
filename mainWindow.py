@@ -3,6 +3,7 @@ from widgets.menu.menu import Menu
 from widgets.home.homeWidget import HomeWidget
 
 from widgets.library.library import LibraryWidget
+from db.controller import *
 from constants import *
 
 
@@ -53,6 +54,8 @@ class MainWindow(QtWidgets.QMainWindow):
         if slotName == HOME_TXT:
             self.actionWindow = HomeWidget(self.centralwidget)
         elif slotName == REPORTS_TXT:
+            #TODO Demo report, change
+            # r = 
             self.actionWindow = LibraryWidget(self.centralwidget)
         elif slotName == ANALYTICS_TXT:
             pass
