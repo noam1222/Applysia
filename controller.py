@@ -1,17 +1,17 @@
+import json
 from reportModel import Report
 from mongoengine import connect
 import matplotlib.pyplot as plt
 
-mydict = {"date": "ababababa", "time": "Highway 37", "applysia": int("3"), "movement": float("4.3"),
-          "trail_points": [(1, 2), (1, 1), (1, 3)]}
 
-def add_report(date, time, movement, applysia, trail_points):
+def add_report(date, time, movement, applysia, trail_points, movement_array):
     report = Report(
         date=date,
         time=time,
         movement=movement,
         applysia=applysia,
-        trail_points=trail_points
+        trail_points=trail_points,
+        movement_every_five=movement_array
     )
     report.save()
     return report
@@ -20,26 +20,68 @@ def add_report(date, time, movement, applysia, trail_points):
 
 # returns cursor with all reports, to access individually iterate over cursor
 def get_all_reports():
-    return Report.objects()
+    reports = Report.objects()
+    return [report.to_mongo().to_dict() for report in reports]
 
 # receives 2 strings as input representing date + time, returns cursor
 def get_report_by_date_and_time(date, time):
-    return Report.objects(date-date, time=time)
+    reports = Report.objects(date=date, time=time)
+    return [report.to_mongo().to_dict() for report in reports]
 
 
 # receives string input representing wanted date, returns cursor
 def get_report_by_date(date):
-    return Report.objects(date=date)
+    reports = Report.objects(date=date)
+    return [report.to_mongo().to_dict() for report in reports]
 
 
 # receives string! input representing wanted time
 def get_report_by_time(time):
-    return Report.objects(time=time)
+    reports = Report.objects(time=time)
+    return [report.to_mongo().to_dict() for report in reports]
 
 
 # receives int!, returns info on wanted applysia
 def get_report_by_applysnum(num):
-    return Report.objects(applysia=num)
+    reports = Report.objects(applysia=num)
+    return [report.to_mongo().to_dict() for report in reports]
+
+# return reports that is an average of ALL aplysias
+def get_average_report_of_all(date, time):
+    reports = get_report_by_date_and_time(date, time)
+
+    if not reports:
+        return json.dumps({})
+
+    total_movement = 0
+    movement_every_five_min_totals = [0] * 12
+    trail_points = []
+
+    # Calculate the total movement and sum of each index in movement_every_five_min
+    for report in reports:
+        total_movement += report['movement']
+
+        for i, value in enumerate(report['movement_every_five']):
+            movement_every_five_min_totals[i] += value
+
+        # Convert trail_points to arrays of integers
+        #the inner arrarys are arrays of tuples
+        trail_points.extend([[int(point['x']), int(point['y'])] for point in report['trail_points']])
+
+    # Calculate averages
+    average_movement = total_movement / len(reports)
+    average_movement_every_five_min = [total / len(reports) for total in movement_every_five_min_totals]
+
+    # Create the average report dictionary
+    average_report = {
+        "date": date,
+        "time": time,
+        "movement": average_movement,
+        "trail_points": trail_points,
+        "movement_every_five_min": average_movement_every_five_min
+    }
+
+    return average_report
 
 
 def delete_reports_by_date(date):
@@ -51,8 +93,6 @@ def delete_reports_by_date(date):
 def delete_reports_by_applysia(num):
     reports_to_delete = Report.objects(applysia=num)
     reports_to_delete.delete()
-
-delete_reports_by_applysia(2)
 
 
 def delete_unique_report(date, time):
