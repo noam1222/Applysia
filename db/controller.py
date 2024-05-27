@@ -1,5 +1,5 @@
 import json
-from reportModel import Report
+from .reportModel import Report
 from mongoengine import connect
 import matplotlib.pyplot as plt
 
@@ -27,9 +27,11 @@ def get_all_reports():
 def get_report_by_date_and_time(date, time):
     reports = Report.objects(date=date, time=time).order_by('applysia')
 
-    average_report = get_average_report_of_all(date, time)
-
     reports_list = [report.to_mongo().to_dict() for report in reports]
+    if len(reports_list) == 0:
+        return []
+
+    average_report = get_average_report_of_all(date, reports_list[0]["time"])
 
     reports_list.insert(0, average_report)
 
@@ -103,7 +105,7 @@ def get_average_report_of_all(date, time, end_time=None):
 
         # Convert trail_points to arrays of integers
         #the inner arrarys are arrays of tuples
-        trail_points.extend([[[float(point['x']), float(point['y'])] for point in report['trail_points']]])
+        trail_points.extend([{"x": float(point['x']), "y": float(point['y'])} for point in report['trail_points']])
 
     # Calculate averages
     average_movement = total_movement / len(reports)
@@ -116,7 +118,7 @@ def get_average_report_of_all(date, time, end_time=None):
         "movement": average_movement,
         "applysia": 0,
         "trail_points": trail_points,
-        "movement_every_five_min": average_movement_every_five_min
+        "movement_every_five": average_movement_every_five_min
     }
 
     return average_report

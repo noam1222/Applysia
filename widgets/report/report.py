@@ -10,6 +10,9 @@ class Ui_ReportWidget(object):
         ReportWidget.setFixedSize(721, 761)
 
         self.reports = reports
+        print(len(self.reports))
+        for r in reports:
+            print(r[APPLYSIA_DB])
         self.curr_app = 0
 
         palette = QtGui.QPalette()
@@ -114,7 +117,8 @@ class Ui_ReportWidget(object):
         for report in reports:
                 if report[APPLYSIA_DB] == ALL_APPLYSIAS:
                         self.ApplysiaToShowComboBox.addItem("All")
-                self.ApplysiaToShowComboBox.addItem(str(report[APPLYSIA_DB]))
+                else:
+                    self.ApplysiaToShowComboBox.addItem(str(report[APPLYSIA_DB]))
         self.infoHorizontalLayout.addWidget(self.ApplysiaToShowComboBox)
         self.ApplysiaToShowComboBox.currentIndexChanged.connect(lambda index: self.app_index_changed(index))
         spacerItem2 = QtWidgets.QSpacerItem(
@@ -363,7 +367,7 @@ class Ui_ReportWidget(object):
         self.dateLabel.setText(_translate(
             "ReportWidget", f"Date: {self.reports[0][DATE_DB]}"))
         self.movementLabel.setText(_translate(
-            "ReportWidget", f"Movement: {self.reports[0][MOVEMENT_DB]}"))
+            "ReportWidget", f"Movement: {self.reports[0][MOVEMENT_DB]:.2f}"))
         self.ApplysiaToShowLabel.setText(
             _translate("ReportWidget", "Applysia:"))
 
@@ -392,7 +396,7 @@ class Ui_ReportWidget(object):
 
     def app_index_changed(self, index):
         self.curr_app = index
-        self.movementLabel.setText("Movement: " + str(self.reports[index][MOVEMENT_DB]))
+        self.movementLabel.setText(f"Movement: {self.reports[index][MOVEMENT_DB]:.2f}")
         self.set_movement5()
 
     def set_movement5(self):
@@ -400,7 +404,7 @@ class Ui_ReportWidget(object):
         for j in (1, 3):
             for i in range(1, 7):
                 item = QtWidgets.QTableWidgetItem()
-                item.setText(str(self.reports[self.curr_app][MVMNT5_DB][counter5]))
+                item.setText(f"{self.reports[self.curr_app][MVMNT5_DB][counter5]:.2f}")
                 counter5 += 1
                 font = QtGui.QFont()
                 font.setPointSize(8)
