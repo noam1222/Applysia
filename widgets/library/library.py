@@ -149,6 +149,7 @@ class LibraryWidget(QtWidgets.QWidget):
         self.dateFilter.addWidget(self.dateIconPicker)
 
         self.filterVerticalLayout.addLayout(self.dateFilter)
+
         #time Filter
         self.timeFilterHL = QtWidgets.QHBoxLayout()
         self.timeFilterHL.setObjectName("timeFilterHL")
@@ -161,12 +162,17 @@ class LibraryWidget(QtWidgets.QWidget):
         self.timeLabel.setFont(font)
         self.timeLabel.setObjectName("timeLabel")
         self.timeFilterHL.addWidget(self.timeLabel)
+
         self.timeEditFilterStart = QtWidgets.QTimeEdit(self.verticalLayoutWidget)
         self.timeEditFilterStart.setButtonSymbols(QtWidgets.QAbstractSpinBox.UpDownArrows)
         self.timeEditFilterStart.setAccelerated(False)
         self.timeEditFilterStart.setObjectName("timeEditFilterStart")
-        #TODO cahnge minutes to only get 00
+        # only round hours (e.g. HH:00)
+        self.timeEditFilterStart.timeChanged.connect(
+            lambda time: self.timeEditFilterStart.setTime(QtCore.QTime(time.hour(), 0))
+        )
         self.timeFilterHL.addWidget(self.timeEditFilterStart)
+
         self.label_3 = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.label_3.setStyleSheet("")
         self.label_3.setAlignment(QtCore.Qt.AlignCenter)
@@ -175,11 +181,17 @@ class LibraryWidget(QtWidgets.QWidget):
         self.timeEditFilterEnd = QtWidgets.QTimeEdit(self.verticalLayoutWidget)
         self.timeEditFilterEnd.setCalendarPopup(False)
         self.timeEditFilterEnd.setObjectName("timeEditFilterEnd")
-        #TODO cahnge minutes to only get 00
+        # only round hours (e.g. HH:00)
+        self.timeEditFilterEnd.timeChanged.connect(
+            lambda time: self.timeEditFilterEnd.setTime(QtCore.QTime(time.hour(), 0))
+        )
         self.timeFilterHL.addWidget(self.timeEditFilterEnd)
+
+        self.timeFilterHL.addStretch()
         self.filterVerticalLayout.addLayout(self.timeFilterHL)
         #movement filter
         self.MovementFilter = QtWidgets.QHBoxLayout()
+        self.MovementFilter.setContentsMargins(0, 12, 0, 10)
         self.MovementFilter.setObjectName("MovementFilter")
         self.label_6 = QtWidgets.QLabel(self.verticalLayoutWidget)
         font = QtGui.QFont()
@@ -260,17 +272,17 @@ class LibraryWidget(QtWidgets.QWidget):
         self.treeWidget_2.topLevelItem(6).setText(0, _translate("LibraryWindow", "Aplysia 12"))
         self.treeWidget_2.setSortingEnabled(__sortingEnabled)
         self.filtersHeadlineLabel.setText(_translate("LibraryWindow", "Filters"))
-        self.label_4.setText(_translate("LibraryWindow", "Date: "))
-        self.timeLabel.setText(_translate("LibraryWindow", "Time: "))
+        self.label_4.setText(_translate("LibraryWindow", "Date:"))
+        self.timeLabel.setText(_translate("LibraryWindow", "Time:"))
         self.label_3.setText(_translate("LibraryWindow", "-"))
-        self.label_6.setText(_translate("LibraryWindow", "Movement "))
-        self.comboBoxLEQorBEQ.setItemText(0, _translate("LibraryWindow", "More than"))
-        self.comboBoxLEQorBEQ.setItemText(1, _translate("LibraryWindow", "Less than"))
+        self.label_6.setText(_translate("LibraryWindow", "Movement"))
+        self.comboBoxLEQorBEQ.setItemText(0, _translate("LibraryWindow", GEQ))
+        self.comboBoxLEQorBEQ.setItemText(1, _translate("LibraryWindow", LEQ))
         self.FilterBtn.setText(_translate("LibraryWindow", "Filter"))
 
     def showCalendar(self):
         self.calendarWidget = QtWidgets.QCalendarWidget(self.parent())
-        self.calendarWidget.setGeometry(QtCore.QRect(350, 275, 391, 241))
+        self.calendarWidget.setGeometry(QtCore.QRect(525, 190, 391, 241))
         self.calendarWidget.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.Israel))
         self.calendarWidget.setStyleSheet("background-color: lightblue;")
         self.calendarWidget.setVerticalHeaderFormat(QtWidgets.QCalendarWidget.NoVerticalHeader)
