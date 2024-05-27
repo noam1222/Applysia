@@ -3,9 +3,26 @@ from controller import *
 
 
 # Create a new report
+delete_reports_by_applysia(3)
 delete_reports_by_applysia(4)
-new_report = add_report("2024-05-11", "12:34:11", 10.5, 4, [{'x': 12.34, 'y': 56.78}, {'x': 23.45, 'y': 67.89}], [3, 4])
-new_report = add_report("2024-05-11", "12:34:13", 11.5, 4, [{'x': 12.34, 'y': 56.78}, {'x': 23.45, 'y': 67.89}], [1, 2])
+delete_reports_by_applysia(9)
+new_rep = add_report("27/05/24", "12:00", .7, 3, [{"x": i * 0.05, "y": i} for i in range(120)], [i for i in range(12)])
+new_rep = add_report("27/05/24", "13:00", .8, 3, [{"x": i * 0.05, "y": i} for i in range(120)], [i for i in range(12)])
+new_rep = add_report("27/05/24", "14:00", .8, 3, [{"x": i * 0.05, "y": i} for i in range(120)], [i+1 for i in range(12)])
+new_rep = add_report("27/05/24", "16:00", .7, 3, [{"x": i * 0.05, "y": i} for i in range(120)], [i for i in range(12)])
+new_rep = add_report("27/05/24", "20:00", .8, 3, [{"x": i * 0.05, "y": i} for i in range(120)], [i for i in range(12)])
+
+new_rep = add_report("27/05/24", "12:00", .8, 4, [{"x": i * 0.05, "y": i} for i in range(120)], [i for i in range(12)])
+new_rep = add_report("27/05/24", "13:00", .8, 4, [{"x": i * 0.05, "y": i} for i in range(120)], [i for i in range(12)])
+new_rep = add_report("27/05/24", "14:00", .8, 4, [{"x": i * 0.05, "y": i} for i in range(120)], [i+1 for i in range(12)])
+new_rep = add_report("27/05/24", "15:00", .8, 4, [{"x": i * 0.05, "y": i} for i in range(120)], [i for i in range(12)])
+new_rep = add_report("27/05/24", "16:00", .8, 4, [{"x": i * 0.05, "y": i} for i in range(120)], [i+2 for i in range(12)])
+
+new_rep = add_report("27/05/24", "12:00", .8, 9, [{"x": i * 0.05, "y": i} for i in range(120)], [i for i in range(12)])
+new_rep = add_report("27/05/24", "13:00", .8, 9, [{"x": i * 0.05, "y": i} for i in range(120)], [i for i in range(12)])
+new_rep = add_report("27/05/24", "14:00", .8, 9, [{"x": i * 0.05, "y": i} for i in range(120)], [i+1 for i in range(12)])
+new_rep = add_report("27/05/24", "15:00", .8, 9, [{"x": i * 0.05, "y": i} for i in range(120)], [i-1 for i in range(12)])
+new_rep = add_report("27/05/24", "16:00", 0, 9, [{"x": i * 0.05, "y": i} for i in range(120)], [i for i in range(12)])
 
 # Get all reports
 #all_reports = get_all_reports()

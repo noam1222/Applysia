@@ -25,10 +25,11 @@ def get_all_reports():
 
 # receives 2 strings as input representing date + time, returns cursor
 def get_report_by_date_and_time(date, time):
-    reports = Report.objects(date=date, time=time)
+    reports = Report.objects(date=date, time=time).order_by('applysia')
     return [report.to_mongo().to_dict() for report in reports]
 
 def get_filtered_reports(date, start, end, movement, geq):
+    #TODO order by applysia
     """first filter reports by given date"""
     reports = Report.objects(date=date)
 
@@ -40,6 +41,8 @@ def get_filtered_reports(date, start, end, movement, geq):
         reports = reports.filter(movement__gte=movement)
     else:
         reports = reports.filter(movement__lte=movement)
+
+    #TODO add all
 
     return [report.to_mongo().to_dict() for report in reports]
 

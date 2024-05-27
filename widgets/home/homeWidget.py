@@ -246,11 +246,11 @@ class HomeWidget(QtWidgets.QWidget):
         #     return
         
         # get the report from DB
-        r = get_report_by_applysnum(4)
+        reports = get_report_by_date_and_time(self.dateTextEdit.text(), self.timeEditText.text())
 
         # open the report
         self.ReportWidget = QtWidgets.QWidget()
         ui = Ui_ReportWidget()
-        ui.setupUi(self.ReportWidget, r)
+        ui.setupUi(self.ReportWidget, reports)
         self.ReportWidget.show()
 

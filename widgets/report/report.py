@@ -102,16 +102,13 @@ class Ui_ReportWidget(object):
 "border: 1px solid gray;\n"
 "padding: 4px 4px 4px 4px;")
         self.ApplysiaToShowComboBox.setObjectName("ApplysiaToShowComboBox")
-        self.ApplysiaToShowComboBox.addItem("")
-        self.ApplysiaToShowComboBox.addItem("")
-        self.ApplysiaToShowComboBox.addItem("")
-        self.ApplysiaToShowComboBox.addItem("")
-        self.ApplysiaToShowComboBox.addItem("")
-        self.ApplysiaToShowComboBox.addItem("")
-        self.ApplysiaToShowComboBox.addItem("")
-        self.ApplysiaToShowComboBox.addItem("")
-        self.ApplysiaToShowComboBox.addItem("")
-        self.ApplysiaToShowComboBox.addItem("")
+        if reports[0][APPLYSIA_DB] == ALL_APPLYSIAS:
+              self.ApplysiaToShowComboBox.addItem("All")
+              for report in reports[1:]:
+                    self.ApplysiaToShowComboBox.addItem(str(report[APPLYSIA_DB]))
+        else:
+              for report in reports:
+                    self.ApplysiaToShowComboBox.addItem(str(report[APPLYSIA_DB]))
         self.infoHorizontalLayout.addWidget(self.ApplysiaToShowComboBox)
         spacerItem2 = QtWidgets.QSpacerItem(40, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.infoHorizontalLayout.addItem(spacerItem2)
@@ -333,16 +330,6 @@ class Ui_ReportWidget(object):
         self.movemetnLabel.setText(_translate("ReportWidget", f"Movement: {self.reports[0][MOVEMENT_DB]}"))
         self.ApplysiaToShowLabel.setText(_translate("ReportWidget", "Applysia:"))
         
-        self.ApplysiaToShowComboBox.setItemText(0, _translate("ReportWidget", "All"))
-        self.ApplysiaToShowComboBox.setItemText(1, _translate("ReportWidget", "1"))
-        self.ApplysiaToShowComboBox.setItemText(2, _translate("ReportWidget", "2"))
-        self.ApplysiaToShowComboBox.setItemText(3, _translate("ReportWidget", "3"))
-        self.ApplysiaToShowComboBox.setItemText(4, _translate("ReportWidget", "4"))
-        self.ApplysiaToShowComboBox.setItemText(5, _translate("ReportWidget", "5"))
-        self.ApplysiaToShowComboBox.setItemText(6, _translate("ReportWidget", "6"))
-        self.ApplysiaToShowComboBox.setItemText(7, _translate("ReportWidget", "7"))
-        self.ApplysiaToShowComboBox.setItemText(8, _translate("ReportWidget", "8"))
-        self.ApplysiaToShowComboBox.setItemText(9, _translate("ReportWidget", "9"))
         item = self.tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("ReportWidget", "New Column"))
         item = self.tableWidget.horizontalHeaderItem(1)
@@ -367,11 +354,11 @@ class Ui_ReportWidget(object):
         self.label_5.setText(_translate("ReportWidget", "Create routes video"))
 
 
-# if __name__ == "__main__":
-#     import sys
-#     app = QtWidgets.QApplication(sys.argv)
-#     ReportWidget = QtWidgets.QWidget()
-#     ui = Ui_ReportWidget()
-#     ui.setupUi(ReportWidget)
-#     ReportWidget.show()
-#     sys.exit(app.exec_())
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    ReportWidget = QtWidgets.QWidget()
+    ui = Ui_ReportWidget()
+    ui.setupUi(ReportWidget)
+    ReportWidget.show()
+    sys.exit(app.exec_())
