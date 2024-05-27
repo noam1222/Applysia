@@ -28,6 +28,22 @@ def get_report_by_date_and_time(date, time):
     reports = Report.objects(date=date, time=time)
     return [report.to_mongo().to_dict() for report in reports]
 
+def get_filtered_reports(date, start, end, movement, geq):
+    """first filter reports by given date"""
+    reports = Report.objects(date=date)
+
+    """filter reports by time range"""
+    reports = reports.filter(time__gte=start, time__lte=end)
+
+    """filter reports by movement field"""
+    if geq:
+        reports = reports.filter(movement__gte=movement)
+    else:
+        reports = reports.filter(movement__lte=movement)
+
+    return [report.to_mongo().to_dict() for report in reports]
+
+
 
 # receives string input representing wanted date, returns cursor
 def get_report_by_date(date):
@@ -66,7 +82,7 @@ def get_average_report_of_all(date, time):
 
         # Convert trail_points to arrays of integers
         #the inner arrarys are arrays of tuples
-        trail_points.extend([[int(point['x']), int(point['y'])] for point in report['trail_points']])
+        trail_points.extend([[[float(point['x']), float(point['y'])] for point in report['trail_points']]])
 
     # Calculate averages
     average_movement = total_movement / len(reports)
