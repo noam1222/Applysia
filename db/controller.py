@@ -1,5 +1,5 @@
 import json
-from .reportModel import Report
+from reportModel import Report
 from mongoengine import connect
 import matplotlib.pyplot as plt
 
@@ -53,8 +53,12 @@ def get_filtered_reports(date, start, end, movement, geq):
     """sort by applysia num"""
     reports = reports.order_by('applysia')
 
-    av_report = get_average_report_of_all()
-    return [report.to_mongo().to_dict() for report in reports]
+    av_report = get_average_report_of_all(date, start, end)
+
+    reports_list = [report.to_mongo().to_dict() for report in reports]
+    reports_list.insert(0, av_report)
+
+    return reports_list
 
 
 
@@ -81,7 +85,7 @@ def get_average_report_of_all(date, time, end_time=None):
         reports = Report.objects(date=date)
         reports = reports.filter(time__gte=time, time__lte=end_time)
     else:
-        reports = get_report_by_date_and_time(date, time)
+        reports = Report.objects(date=date, time=time)
 
     if not reports:
         return json.dumps({})
