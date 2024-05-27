@@ -6,8 +6,6 @@ class LibraryWidget(QtWidgets.QWidget):
     def __init__(self, parent):
         super(LibraryWidget, self).__init__(parent)
 
-        # print(report["time"])
-
         # set up
         self.setGeometry(QtCore.QRect(280, -30, 721, 761))
         self.setObjectName("LibraryWidget")

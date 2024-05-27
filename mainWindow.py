@@ -54,15 +54,10 @@ class MainWindow(QtWidgets.QMainWindow):
         if slotName == HOME_TXT:
             self.actionWindow = HomeWidget(self.centralwidget)
         elif slotName == REPORTS_TXT:
-            #TODO Demo report, change
-            # r = 
             self.actionWindow = LibraryWidget(self.centralwidget)
         elif slotName == ANALYTICS_TXT:
             pass
         self.actionWindow.show()
-
-
-    
 
 
 if __name__ == "__main__":

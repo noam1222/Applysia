@@ -1,10 +1,14 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from constants import *
+
 
 class Ui_ReportWidget(object):
-    def setupUi(self, ReportWidget):
+    def setupUi(self, ReportWidget, reports):
         ReportWidget.setObjectName("ReportWidget")
         ReportWidget.setFixedSize(721, 761)
+
+        self.reports = reports
 
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(255, 253, 208))
@@ -71,6 +75,17 @@ class Ui_ReportWidget(object):
         self.infoHorizontalLayout.addItem(spacerItem3)
 
         #TODO add total movemnt label
+        self.movemetnLabel = QtWidgets.QLabel(self.verticalLayoutWidget)
+        font = QtGui.QFont()
+        font.setFamily("Narkisim")
+        font.setPointSize(16)
+        font.setBold(True)
+        font.setWeight(75)
+        self.movemetnLabel.setFont(font)
+        self.movemetnLabel.setObjectName("movemntLabel")
+        self.infoHorizontalLayout.addWidget(self.movemetnLabel)
+        spacerItem34 = QtWidgets.QSpacerItem(40, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.infoHorizontalLayout.addItem(spacerItem34)
         
         self.ApplysiaToShowLabel = QtWidgets.QLabel(self.verticalLayoutWidget)
         font = QtGui.QFont()
@@ -312,10 +327,12 @@ class Ui_ReportWidget(object):
 
     def retranslateUi(self, ReportWidget):
         _translate = QtCore.QCoreApplication.translate
-        ReportWidget.setWindowTitle(_translate("ReportWidget", "Report #12"))
-        self.headlineLabel.setText(_translate("ReportWidget", "Report #12"))
-        self.dateLabel.setText(_translate("ReportWidget", "Date: 10/12/21"))
+        ReportWidget.setWindowTitle(_translate("ReportWidget", "Report"))
+        self.headlineLabel.setText(_translate("ReportWidget", "Report"))
+        self.dateLabel.setText(_translate("ReportWidget", f"Date: {self.reports[0][DATE_DB]}"))
+        self.movemetnLabel.setText(_translate("ReportWidget", f"Movement: {self.reports[0][MOVEMENT_DB]}"))
         self.ApplysiaToShowLabel.setText(_translate("ReportWidget", "Applysia:"))
+        
         self.ApplysiaToShowComboBox.setItemText(0, _translate("ReportWidget", "All"))
         self.ApplysiaToShowComboBox.setItemText(1, _translate("ReportWidget", "1"))
         self.ApplysiaToShowComboBox.setItemText(2, _translate("ReportWidget", "2"))
