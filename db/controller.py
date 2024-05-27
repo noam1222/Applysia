@@ -53,7 +53,7 @@ def get_filtered_reports(date, start, end, movement, geq):
 
     #TODO add all
     """sort by applysia num"""
-    reports = reports.order_by('applysia')
+    reports = reports.order_by('time')
 
     av_report = get_average_report_of_all(date, start, end)
 
