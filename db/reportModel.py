@@ -10,4 +10,4 @@ class Report(Document):
     movement = fields.FloatField(required=True)
     applysia = fields.IntField(required=True)
     trail_points = fields.ListField(fields.DictField(), required=True)
-    movement_every_five = fields.ListField(fields.IntField(), required=True)
+    movement_every_five = fields.ListField(fields.FloatField(), required=True)

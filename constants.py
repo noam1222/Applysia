@@ -9,7 +9,7 @@ GEQ = ">="
 LEQ = "<="
 
 DATE_DB = "date"
-TIME_DB = "TIME"
+TIME_DB = "time"
 MOVEMENT_DB = "movement"
 APPLYSIA_DB = "applysia"
 TRAIL_POINTS_DB = "trail_points"
@@ -21,3 +21,4 @@ def getIconPath(icon_name):
 
 def getImgPath(img_name):
     return f"{IMGS_PATH}/{img_name}"
+
