@@ -1,7 +1,10 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
+import sys
+from datetime import datetime
+
 from .components import *
 from constants import *
-from datetime import datetime
+from widgets.report.report import Ui_ReportWidget
 
 class HomeWidget(QtWidgets.QWidget):
     def __init__(self, parent):
@@ -115,6 +118,7 @@ class HomeWidget(QtWidgets.QWidget):
         reg_exp = QtCore.QRegExp("^([01][0-9]|2[0-3]):[0-5][0-9]$")
         validator = QtGui.QRegExpValidator(reg_exp, self)
         self.timeEditText.setValidator(validator)
+        self.timeEditText.textChanged.connect(self.timeChanged)
         # self.timeEditText.focusOutEvent = self.timeTextEditFocusOut
         self.horizontalLayout_7.addWidget(self.timeEditText)
 
@@ -221,16 +225,29 @@ class HomeWidget(QtWidgets.QWidget):
         current_time = datetime.now().strftime("%H:%M")
         self.timeEditText.setText(current_time[0:3] + "00")
 
+    def timeChanged(self):
+        time = self.timeEditText.text()
+        if len(time) >= 2:
+            self.timeEditText.blockSignals(True)
+            self.timeEditText.setText(time[:2] + ":00")
+            self.timeEditText.blockSignals(False)
+
     def analyzeBtnClicked(self):
-        # check for correct date input
-        if self.dateTextEdit.text() == "":
-            QtWidgets.QMessageBox.warning(self, "Invalid Date", "Please enter a valid date (use the calendar icon)")
-            return
-        # check for correct time input
-        if not self.timeEditText.validator().regExp().exactMatch(self.timeEditText.text()):
-            QtWidgets.QMessageBox.warning(self, "Invalid Time", "Please enter a valid time in the format HH:MM.")
-            return
-        # check if user choose video
-        if not self.filePath:
-            QtWidgets.QMessageBox.warning(self, "Invalid Video", "Please Choose video.")
-            return
+        # TODO return checking
+        # # check for correct date input
+        # if self.dateTextEdit.text() == "":
+        #     QtWidgets.QMessageBox.warning(self, "Invalid Date", "Please enter a valid date (use the calendar icon)")
+        #     return
+        # # check for correct time input
+        # if not self.timeEditText.validator().regExp().exactMatch(self.timeEditText.text()):
+        #     QtWidgets.QMessageBox.warning(self, "Invalid Time", "Please enter a valid time in the format HH:MM.")
+        #     return
+        # # check if user choose video
+        # if not self.filePath:
+        #     QtWidgets.QMessageBox.warning(self, "Invalid Video", "Please Choose video.")
+        #     return
+        self.ReportWidget = QtWidgets.QWidget()
+        ui = Ui_ReportWidget()
+        ui.setupUi(self.ReportWidget)
+        self.ReportWidget.show()
+

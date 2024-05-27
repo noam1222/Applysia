@@ -100,7 +100,7 @@ class LibraryWidget(QtWidgets.QWidget):
         self.horizontalLayout.addWidget(self.treeWidget_2)
 
         # filter Vertical layout
-        #TODO fix decoration
+        #TODO add decoration
         self.filterVerticalLayout = QtWidgets.QVBoxLayout()
         self.filterVerticalLayout.setSpacing(15)
         self.filterVerticalLayout.setObjectName("filterVerticalLayout")

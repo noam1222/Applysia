@@ -6,6 +6,27 @@ class Ui_ReportWidget(object):
         ReportWidget.setObjectName("ReportWidget")
         ReportWidget.setFixedSize(721, 761)
 
+        palette = QtGui.QPalette()
+        brush = QtGui.QBrush(QtGui.QColor(255, 253, 208))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
+        brush = QtGui.QBrush(QtGui.QColor(170, 125, 105))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 253, 208))
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
+        brush = QtGui.QBrush(QtGui.QColor(170, 125, 105))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 253, 208))
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
+        brush = QtGui.QBrush(QtGui.QColor(170, 125, 105))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 253, 208))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        ReportWidget.setPalette(palette)
+
         self.verticalLayoutWidget = QtWidgets.QWidget(ReportWidget)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 0, 721, 761))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
@@ -291,7 +312,7 @@ class Ui_ReportWidget(object):
 
     def retranslateUi(self, ReportWidget):
         _translate = QtCore.QCoreApplication.translate
-        ReportWidget.setWindowTitle(_translate("ReportWidget", "Form"))
+        ReportWidget.setWindowTitle(_translate("ReportWidget", "Report #12"))
         self.headlineLabel.setText(_translate("ReportWidget", "Report #12"))
         self.dateLabel.setText(_translate("ReportWidget", "Date: 10/12/21"))
         self.ApplysiaToShowLabel.setText(_translate("ReportWidget", "Applysia:"))
@@ -329,11 +350,11 @@ class Ui_ReportWidget(object):
         self.label_5.setText(_translate("ReportWidget", "Create routes video"))
 
 
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    ReportWidget = QtWidgets.QWidget()
-    ui = Ui_ReportWidget()
-    ui.setupUi(ReportWidget)
-    ReportWidget.show()
-    sys.exit(app.exec_())
+# if __name__ == "__main__":
+#     import sys
+#     app = QtWidgets.QApplication(sys.argv)
+#     ReportWidget = QtWidgets.QWidget()
+#     ui = Ui_ReportWidget()
+#     ui.setupUi(ReportWidget)
+#     ReportWidget.show()
+#     sys.exit(app.exec_())
