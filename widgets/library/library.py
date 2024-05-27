@@ -70,7 +70,9 @@ class LibraryWidget(QtWidgets.QWidget):
 
         # tree 2: 6-12
         self.treeWidget_2 = QtWidgets.QTreeWidget(self.verticalLayoutWidget)
-        self.treeWidget_2.itemClicked.connect(lambda item, col: self.open_report(item.text(col), item.parent().text(col)))
+        self.treeWidget_2.itemClicked.connect(
+            lambda item, col: self.open_report(item.text(col), item.parent().text(col)) if item.parent() else print()
+        )
         self.treeWidget_2.setStyleSheet("""
             background-color: #FFFDD0;  /* Cream color */
             border-top-left-radius: 10px;
@@ -217,6 +219,7 @@ class LibraryWidget(QtWidgets.QWidget):
         self.filterVerticalLayout.addLayout(self.MovementFilter)
         # filter Button
         self.FilterBtn = QtWidgets.QPushButton(self.verticalLayoutWidget)
+        self.FilterBtn.clicked.connect(self.filter)
         self.FilterBtn.setMinimumSize(QtCore.QSize(50, 60))
         font = QtGui.QFont()
         font.setFamily("Segoe UI Black")
@@ -343,21 +346,34 @@ class LibraryWidget(QtWidgets.QWidget):
         else:
             time_end = time_end[:-1] + "1"
 
-        self.reports = get_filtered_reports(date, time_start, time_end, mvmnt, condition)
+        # Remove tree content
+        #TODO add all after ari fix
+        for i in range(1, 6):
+            top_level_item = self.treeWidget.topLevelItem(i)
+            if top_level_item is not None:
+                while top_level_item.childCount() > 0:
+                    top_level_item.takeChild(0)
+        k = 0
+        for i in range(6, 13):
+            top_level_item = self.treeWidget_2.topLevelItem(k)
+            k += 1
+            if top_level_item is not None:
+                while top_level_item.childCount() > 0:
+                    top_level_item.takeChild(0)
+
+        reports = get_filtered_reports(date, time_start, time_end, mvmnt, condition)
+        if reports == ['{}']:
+            return
 
         # print(self.reports)
 
         times = [[] for i in range(13)]
-        for report in self.reports:
+        for report in reports:
             app = report[APPLYSIA_DB]
             # TODO change after ari fix all.time
             if app:
                 t = str(report[TIME_DB].time())[:-3]
                 times[app].append(QtWidgets.QTreeWidgetItem([t]))
-
-        for i in range(len(times)):
-            print(f"{i}: {len(times[i])}")
-
 
         # TODO chang to 0 after ari fix
         for i in range(1, 6):
