@@ -247,7 +247,6 @@ class HomeWidget(QtWidgets.QWidget):
         
         # get the report from DB
         reports = get_report_by_date_and_time(self.dateTextEdit.text(), self.timeEditText.text())
-
         # open the report
         self.ReportWidget = QtWidgets.QWidget()
         ui = Ui_ReportWidget()

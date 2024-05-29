@@ -7,6 +7,7 @@ from db.controller import *
 from constants import *
 
 
+
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()

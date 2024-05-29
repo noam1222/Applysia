@@ -135,8 +135,13 @@ def delete_reports_by_applysia(num):
     reports_to_delete.delete()
 
 
-def delete_unique_report(date, time):
+def delete_all_reports_by_date_and_time(date, time):
     reports_to_delete = Report.objects(date=date, time=time)
+    reports_to_delete.delete()
+
+
+def delete_unique_report(date, time, aplysia):
+    reports_to_delete = Report.objects(date=date, time=time, applysia=aplysia)
     reports_to_delete.delete()
 
 # if we want a function that deletes the whole collection of reports

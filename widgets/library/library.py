@@ -4,6 +4,8 @@ from datetime import datetime
 from constants import *
 from widgets.home.components.toolBtn import ToolBtn
 from widgets.report.report import *
+from .CustomeTreeWidget import CustomTreeWidget
+from .trash import TrashLabel
 
 from db.controller import get_filtered_reports, get_report_by_date_and_time
 
@@ -38,8 +40,10 @@ class LibraryWidget(QtWidgets.QWidget):
         self.horizontalLayout.setObjectName("horizontalLayout")
 
         # first tree: All, 1-5
-        self.treeWidget = QtWidgets.QTreeWidget(self.verticalLayoutWidget)
-        self.treeWidget.itemClicked.connect(lambda item, col: self.open_report(item.text(col), item.parent().text(col)))
+        self.treeWidget = CustomTreeWidget(self.verticalLayoutWidget)
+        self.treeWidget.itemClicked.connect(
+            lambda item, col: self.open_report(item.text(col), item.parent().text(col)) if item.parent() else print()
+        )
         self.treeWidget.setStyleSheet("""
             background-color: #FFFDD0;  /* Cream color */
             border-top-left-radius: 10px;
@@ -69,10 +73,11 @@ class LibraryWidget(QtWidgets.QWidget):
         self.horizontalLayout.addWidget(self.treeWidget)
 
         # tree 2: 6-12
-        self.treeWidget_2 = QtWidgets.QTreeWidget(self.verticalLayoutWidget)
+        self.treeWidget_2 = CustomTreeWidget(self.verticalLayoutWidget)
         self.treeWidget_2.itemClicked.connect(
             lambda item, col: self.open_report(item.text(col), item.parent().text(col)) if item.parent() else print()
         )
+        # self.treeWidget_2.
         self.treeWidget_2.setStyleSheet("""
             background-color: #FFFDD0;  /* Cream color */
             border-top-left-radius: 10px;
@@ -237,6 +242,10 @@ class LibraryWidget(QtWidgets.QWidget):
         self.filterVerticalLayout.addWidget(self.FilterBtn)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.filterVerticalLayout.addItem(spacerItem)
+
+        self.trash = TrashLabel(self.verticalLayoutWidget, self)
+        self.filterVerticalLayout.addWidget(self.trash, 0, QtCore.Qt.AlignHCenter)
+
         self.horizontalLayout.addLayout(self.filterVerticalLayout)
         self.verticalLayout.addLayout(self.horizontalLayout)
 
@@ -304,21 +313,24 @@ class LibraryWidget(QtWidgets.QWidget):
         self.calendarWidget.hide()
 
     def open_report(self, text, parent_text):
-        if parent_text == "All":
-            app = 0
-        else:
-            if parent_text[-2] == '1':
-                app = int(parent_text[-2:])
-            else:
-                app = int(parent_text[-1])
+        aplysia = self.get_app_num(parent_text)
 
         reports = get_report_by_date_and_time(self.curr_date, text)
-        app = [r[APPLYSIA_DB] for r in reports].index(app)
+        app = [r[APPLYSIA_DB] for r in reports].index(aplysia)
         # open the report
         self.ReportWidget = QtWidgets.QWidget()
         ui = Ui_ReportWidget()
         ui.setupUi(self.ReportWidget, reports, current_aplysia=app)
         self.ReportWidget.show()
+
+    def get_app_num(self, parent_text):
+        if parent_text == "All":
+            return 0
+        else:
+            if parent_text[-2] == '1':
+                return int(parent_text[-2:])
+            else:
+                return int(parent_text[-1])
 
     def filter(self):
         date = self.dateEditFilter.text()
