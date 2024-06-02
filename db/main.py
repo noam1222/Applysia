@@ -14,8 +14,8 @@ new_rep = add_report("27/05/24", "13:00", 6, [{"x": i * 0.05, "y": i} for i in r
 #new_rep = add_report("27/05/24", "15:00", .7, 2, [{"x": i * 0.05, "y": i} for i in range(120)], [i+4 for i in range(12)])
 
 
-x = get_all_reports()
-print(x)
+x = get_average_report_of_all("27/05/24", "13:00")
+print(type(x['time']))
 
 new_rep = add_report("27/05/24", "13:00", 3, [{"x": i * 0.05, "y": i} for i in range(120)], [i for i in range(12)])
 new_rep = add_report("27/05/24", "14:00",  3, [{"x": i * 0.05, "y": i} for i in range(120)], [i+1 for i in range(12)])

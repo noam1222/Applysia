@@ -1,4 +1,6 @@
 import json
+from datetime import datetime
+
 from reportModel import Report
 from mongoengine import connect
 import matplotlib.pyplot as plt
@@ -113,10 +115,14 @@ def get_average_report_of_all(date, time, end_time=None):
     average_movement = total_movement / len(reports)
     average_movement_every_five_min = [total / len(reports) for total in movement_every_five_min_totals]
 
+    #convert time to dateTime object
+    time_format = "%H:%M"
+    time_converted = datetime.strptime(time, time_format)
+
     # Create the average report dictionary
     average_report = {
         "date": date,
-        "time": time,
+        "time": time_converted,
         "movement": average_movement,
         "applysia": 0,
         "trail_points": trail_points,
