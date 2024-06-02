@@ -9,16 +9,16 @@ delete_reports_by_applysia(9)
 delete_reports_by_applysia(6)
 delete_reports_by_applysia(2)
 
-new_rep = add_report("27/05/24", "13:00", .9, 6, [{"x": i * 0.05, "y": i} for i in range(120)], [i for i in range(12)])
-new_rep = add_report("27/05/24", "14:00", .8, 4, [{"x": i * 0.05, "y": i} for i in range(120)], [i+2 for i in range(12)])
-new_rep = add_report("27/05/24", "15:00", .7, 2, [{"x": i * 0.05, "y": i} for i in range(120)], [i+4 for i in range(12)])
+new_rep = add_report("27/05/24", "13:00", 6, [{"x": i * 0.05, "y": i} for i in range(120)], [i for i in range(12)])
+#new_rep = add_report("27/05/24", "14:00", .8, 4, [{"x": i * 0.05, "y": i} for i in range(120)], [i+2 for i in range(12)])
+#new_rep = add_report("27/05/24", "15:00", .7, 2, [{"x": i * 0.05, "y": i} for i in range(120)], [i+4 for i in range(12)])
 
 
-x = get_filtered_reports("27/05/24", "14:00", "15:00", 1, False)
+x = get_all_reports()
 print(x)
 
-new_rep = add_report("27/05/24", "13:00", .8, 3, [{"x": i * 0.05, "y": i} for i in range(120)], [i for i in range(12)])
-new_rep = add_report("27/05/24", "14:00", .8, 3, [{"x": i * 0.05, "y": i} for i in range(120)], [i+1 for i in range(12)])
+new_rep = add_report("27/05/24", "13:00", 3, [{"x": i * 0.05, "y": i} for i in range(120)], [i for i in range(12)])
+new_rep = add_report("27/05/24", "14:00",  3, [{"x": i * 0.05, "y": i} for i in range(120)], [i+1 for i in range(12)])
 new_rep = add_report("27/05/24", "12:00", .7, 3, [{"x": i * 0.05, "y": i} for i in range(120)], [i for i in range(12)])
 new_rep = add_report("27/05/24", "16:00", .7, 3, [{"x": i * 0.05, "y": i} for i in range(120)], [i for i in range(12)])
 new_rep = add_report("27/05/24", "20:00", .8, 3, [{"x": i * 0.05, "y": i} for i in range(120)], [i for i in range(12)])
