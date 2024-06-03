@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from reportModel import Report
 from mongoengine import connect
@@ -85,44 +85,32 @@ def get_report_by_applysnum(num):
     reports = Report.objects(applysia=num)
     return [report.to_mongo().to_dict() for report in reports]
 
-# return reports that is an average of ALL aplysias
-def get_average_report_of_all(date, time, end_time=None):
-    if end_time:
-        reports = Report.objects(date=date)
-        reports = reports.filter(time__gte=time, time__lte=end_time)
-    else:
-        reports = Report.objects(date=date, time=time)
-
-    if not reports:
-        return json.dumps({})
+# given cursor of reports of certain hour, returns average report of that hour
+def calc_average_of_hour(date, time,reports_cursor):
 
     total_movement = 0
     movement_every_five_min_totals = [0] * 12
     trail_points = []
 
     # Calculate the total movement and sum of each index in movement_every_five_min
-    for report in reports:
+    for report in reports_cursor:
         total_movement += report['movement']
 
         for i, value in enumerate(report['movement_every_five']):
             movement_every_five_min_totals[i] += value
 
         # Convert trail_points to arrays of integers
-        #the inner arrarys are arrays of tuples
+        # the inner arrarys are arrays of tuples
         trail_points.extend([{"x": float(point['x']), "y": float(point['y'])} for point in report['trail_points']])
 
     # Calculate averages
-    average_movement = total_movement / len(reports)
-    average_movement_every_five_min = [total / len(reports) for total in movement_every_five_min_totals]
-
-    #convert time to dateTime object
-    time_format = "%H:%M"
-    time_converted = datetime.strptime(time, time_format)
+    average_movement = total_movement / len(reports_cursor)
+    average_movement_every_five_min = [total / len(reports_cursor) for total in movement_every_five_min_totals]
 
     # Create the average report dictionary
     average_report = {
         "date": date,
-        "time": time_converted,
+        "time": time,
         "movement": average_movement,
         "applysia": 0,
         "trail_points": trail_points,
@@ -130,6 +118,36 @@ def get_average_report_of_all(date, time, end_time=None):
     }
 
     return average_report
+
+# return reports that is an average of ALL aplysias
+def get_average_report_of_all(date, time, end_time=None):
+    time_format = "%H:%M"
+    start_time = datetime.strptime(time, time_format)
+    if end_time:
+        e_time = datetime.strptime(end_time, time_format)
+
+        reports_list = []
+
+        current_time = start_time
+        while current_time <= e_time:
+            time_string = current_time.strftime("%H:%M")
+            reports = Report.objects(date=date, time=time_string)
+            if reports:
+                hour_average = calc_average_of_hour(date, current_time, reports)
+                reports_list.append(hour_average)
+            current_time = current_time + timedelta(hours=1)
+        if len(reports_list) != 0:
+            return reports_list
+        else:
+            return json.dumps({})
+
+    else:
+        reports = Report.objects(date=date, time=time)
+        if reports:
+            average_rep = calc_average_of_hour(date, start_time, reports)
+            return average_rep
+        else:
+            return json.dumps({})
 
 
 def delete_reports_by_date(date):
