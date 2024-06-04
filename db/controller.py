@@ -1,7 +1,7 @@
 import json
 from datetime import datetime, timedelta
 
-from reportModel import Report
+from .reportModel import Report
 from mongoengine import connect
 import matplotlib.pyplot as plt
 import numpy as np
@@ -35,7 +35,7 @@ def get_report_by_date_and_time(date, time):
     if len(reports_list) == 0:
         return []
 
-    average_report = get_average_report_of_all(date, reports_list[0]["time"])
+    average_report = get_average_report_of_all(date, time)
 
     reports_list.insert(0, average_report)
 

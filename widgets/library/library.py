@@ -333,6 +333,20 @@ class LibraryWidget(QtWidgets.QWidget):
                 return int(parent_text[-1])
 
     def filter(self):
+        # Remove tree former content
+        for i in range(0, 6):
+            top_level_item = self.treeWidget.topLevelItem(i)
+            if top_level_item is not None:
+                while top_level_item.childCount() > 0:
+                    top_level_item.takeChild(0)
+        k = 0
+        for i in range(6, 13):
+            top_level_item = self.treeWidget_2.topLevelItem(k)
+            k += 1
+            if top_level_item is not None:
+                while top_level_item.childCount() > 0:
+                    top_level_item.takeChild(0)
+
         date = self.dateEditFilter.text()
         time_start = self.timeEditFilterStart.text()
         time_end = self.timeEditFilterEnd.text()
@@ -358,21 +372,6 @@ class LibraryWidget(QtWidgets.QWidget):
         else:
             time_end = time_end[:-1] + "1"
 
-        # Remove tree content
-        #TODO add all after ari fix
-        for i in range(1, 6):
-            top_level_item = self.treeWidget.topLevelItem(i)
-            if top_level_item is not None:
-                while top_level_item.childCount() > 0:
-                    top_level_item.takeChild(0)
-        k = 0
-        for i in range(6, 13):
-            top_level_item = self.treeWidget_2.topLevelItem(k)
-            k += 1
-            if top_level_item is not None:
-                while top_level_item.childCount() > 0:
-                    top_level_item.takeChild(0)
-
         reports = get_filtered_reports(date, time_start, time_end, mvmnt, condition)
         if reports == ['{}']:
             return
@@ -380,15 +379,18 @@ class LibraryWidget(QtWidgets.QWidget):
         # print(self.reports)
 
         times = [[] for i in range(13)]
-        for report in reports:
+        # for reports of All
+        for report in reports[0]:
+            app = 0
+            t = str(report[TIME_DB].time())[:-3]
+            times[app].append(QtWidgets.QTreeWidgetItem([t]))
+        # for the rest
+        for report in reports[1:]:
             app = report[APPLYSIA_DB]
-            # TODO change after ari fix all.time
-            if app:
-                t = str(report[TIME_DB].time())[:-3]
-                times[app].append(QtWidgets.QTreeWidgetItem([t]))
+            t = str(report[TIME_DB].time())[:-3]
+            times[app].append(QtWidgets.QTreeWidgetItem([t]))
 
-        # TODO chang to 0 after ari fix
-        for i in range(1, 6):
+        for i in range(0, 6):
             if len(times[i]) != 0:
                 self.treeWidget.topLevelItem(i).addChildren(times[i])
 

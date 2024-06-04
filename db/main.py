@@ -1,6 +1,8 @@
 import pymongo
 from controller import *
 
+from mongoengine import connect
+result = connect(db="applysias", host="mongodb://localhost:27017/")
 
 # Create a new report
 delete_reports_by_applysia(3)

@@ -43,9 +43,8 @@ class TrashLabel(QtWidgets.QLabel):
                     else:
                         app_num = self.libraryWindow.get_app_num(parent_text)
                         delete_unique_report(self.libraryWindow.curr_date, text, app_num)
-                        parent_item.removeChild(dragged_item)
+                        self.libraryWindow.filter()
             else:
-                # TODO add remove all applysia reports
                 event.ignore()
         else:
             event.ignore()
