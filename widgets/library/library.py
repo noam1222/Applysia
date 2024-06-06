@@ -252,7 +252,7 @@ class LibraryWidget(QtWidgets.QWidget):
         self.retranslateUi(self)
         QtCore.QMetaObject.connectSlotsByName(self)
 
-        self.filter()
+        self.filter(init=True)
 
     def retranslateUi(self, LibraryWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -332,7 +332,7 @@ class LibraryWidget(QtWidgets.QWidget):
             else:
                 return int(parent_text[-1])
 
-    def filter(self):
+    def filter(self, init=False):
         # Remove tree former content
         for i in range(0, 6):
             top_level_item = self.treeWidget.topLevelItem(i)
@@ -374,6 +374,8 @@ class LibraryWidget(QtWidgets.QWidget):
 
         reports = get_filtered_reports(date, time_start, time_end, mvmnt, condition)
         if reports == ['{}']:
+            if not init:
+                QtWidgets.QMessageBox.information(self, "No results", "There are no reports that much to this filter.")
             return
 
         # print(self.reports)

@@ -46,13 +46,13 @@ class TrashLabel(QtWidgets.QLabel):
                         reply = self.deleteModal("ALL", date, time)
                         if reply == QtWidgets.QMessageBox.Ok:
                             delete_all_reports_by_date_and_time(date, time)
-                            self.libraryWindow.filter()
+                            self.libraryWindow.filter(init=True)
                     else:
                         app_num = self.libraryWindow.get_app_num(parent_text)
                         reply = self.deleteModal(f"applysia {app_num}", date, time)
                         if reply == QtWidgets.QMessageBox.Ok:
                             delete_unique_report(date, time, app_num)
-                            self.libraryWindow.filter()
+                            self.libraryWindow.filter(init=True)
             else:
                 event.ignore()
         else:
