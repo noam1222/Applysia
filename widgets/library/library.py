@@ -232,12 +232,22 @@ class LibraryWidget(QtWidgets.QWidget):
         font.setBold(True)
         font.setWeight(75)
         self.FilterBtn.setFont(font)
-        self.FilterBtn.setStyleSheet("background-color:  #FFFDD0;  /* Cream color */"
-                                     "border-top-left-radius: 30px;\n"
-                                     "border-bottom-left-radius: 30px;\n"
-                                     "border-top-right-radius: 30px;\n"
-                                     "border-bottom-right-radius: 30px;\n"
-                                     "color: #dd4f4f;")
+        self.FilterBtn.setStyleSheet("""
+            QPushButton {
+             background-color:  #FFFDD0;  /* Cream color */
+             border-top-left-radius: 30px;
+             border-bottom-left-radius: 30px;
+             border-top-right-radius: 30px;
+             border-bottom-right-radius: 30px;
+             color: #dd4f4f;
+            }
+            QPushButton:hover {
+             background-color: #dbdab4;
+            }
+            QPushButton:pressed {
+             background-color: #c7c69d;
+            }
+        """)
         self.FilterBtn.setObjectName("FilterBtn")
         self.filterVerticalLayout.addWidget(self.FilterBtn)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)

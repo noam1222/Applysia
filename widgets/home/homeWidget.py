@@ -68,10 +68,20 @@ class HomeWidget(QtWidgets.QWidget):
         font.setKerning(True)
         self.chooseVideoBtn.setFont(font)
         self.chooseVideoBtn.setText("Choose Video")
-        self.chooseVideoBtn.setStyleSheet("background-color: black;\n"
-                                          "color: white;\n"
-                                          "border-radius: 5px;\n"
-                                          "padding: 5px;")
+        self.chooseVideoBtn.setStyleSheet("""
+            QPushButton {
+                background-color: black;
+                color: white;
+                border-radius: 5px;
+                padding: 5px;
+            }
+            QPushButton:hover {
+                background-color: #141414;
+            }
+            QPushButton:pressed {
+                background-color: #383636;
+            }
+        """)
         self.chooseVideoBtn.clicked.connect(self.openFileDialog)
         self.chooseVideoBtn.setObjectName("chooseVideoBtn")
         self.horizontalLayout_5.addWidget(self.chooseVideoBtn)
@@ -173,10 +183,20 @@ class HomeWidget(QtWidgets.QWidget):
         font.setWeight(50)
         self.analyzeBtn.setFont(font)
         self.analyzeBtn.setText("Analyze")
-        self.analyzeBtn.setStyleSheet("background-color: rgb(255, 255, 178);\n"
-                                      "color: black;\n"
-                                      "border-radius: 5px;\n"
-                                      "padding: 5px;")
+        self.analyzeBtn.setStyleSheet("""
+            QPushButton {
+                background-color: rgb(255, 255, 178);
+                color: black;
+                border-radius: 5px;
+                padding: 5px;
+            }
+            QPushButton:hover {
+                background-color: #ededa4;
+            }
+            QPushButton:pressed {
+                background-color: #d4d494;
+            }
+        """)
         self.analyzeBtn.setObjectName("analyzeBtn")
         self.analyzeBtn.clicked.connect(self.analyzeBtnClicked)
         self.verticalLayout_2.addWidget(self.analyzeBtn)
