@@ -2,6 +2,9 @@ import cv2 #openCV
 import torch
 
 from .coordinates import get_cage_num
+from constants import *
+
+LAST_FIVE = "last_five"
 
 def calc_rec_center(x_right, y_top, x_left, y_bottom):
     x_center = x_left + ((x_right - x_left) / 2)
@@ -23,6 +26,7 @@ def analyze(video_path):
     results = {} # goint to result dict of app_num: movemnt, [movement_every_five], [trail_points]
     
     # Get the total number of frames and the frame rate
+    # TODO handle different video speeds
     fps = capture.get(cv2.CAP_PROP_FPS)  # Frames per second
     total_frames = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
     one_hour_frames = int(60 * 60 * fps)
@@ -40,10 +44,13 @@ def analyze(video_path):
         if not ret:
             break
         five_counter += 1
+        # TODO check why needed if already limit to 1 hour
+        if five_counter // 10 > 11:  # another safety in case of more than an hour
+            break
 
         # start the analysis on this frame
         res = model(frame)
-        checked = [False for _ in range(15)] # safety in case the model recognize 2 applysias in same cage
+        checked = [False for _ in range(15)]  # safety in case the model recognize 2 aplysias in same cage
         for obj in res.pred[0]:
             x_right, y_top, x_left, y_bottom, confidence, category = obj.numpy()
             if confidence < 0.5:
@@ -58,27 +65,29 @@ def analyze(video_path):
             checked[app_num-1] = True
             if app_num not in results:
                 results[app_num] = {
-                    "movement": 0,
-                    "movement_every_five": { i: 0.0 for i in range(12) },
-                    "trail_points": [],
-                    "last_five": (0, 0)
+                    MOVEMENT_DB: 0,
+                    MVMNT5_DB: { i: 0.0 for i in range(12) },
+                    TRAIL_POINTS_DB: [],
+                    LAST_FIVE: (0, 0)
                 }
 
             # add to trail points
-            results[app_num]["trail_points"].append(center)
+            results[app_num][TRAIL_POINTS_DB].append(center)
 
             # if moved add to movement
-            if five_counter % 10 == 0: # there is 10 30-seconds in 5-minutes
-                if is_different(center, results[app_num]["last_five"]):
-                    results[app_num]["last_five"] = center
-                    results[app_num]["movement_every_five"][five_counter // 10] = 1 / 12
-                    results[app_num]["movement"] += 1 / 12
+            if five_counter % 10 == 0:  # there is 10 30-seconds in 5-minutes
+                if is_different(center, results[app_num][LAST_FIVE]):
+                    results[app_num][LAST_FIVE] = center
+                    results[app_num][MVMNT5_DB][five_counter // 10] = 1 / 12
+                    results[app_num][MOVEMENT_DB] += 1 / 12
                 else:
-                    results[app_num]["movement_every_five"][five_counter // 10] = 0.0
+                    results[app_num][MVMNT5_DB][five_counter // 10] = 0.0
 
 
     for key in results:
-        results[key]["movement_every_five"] = list(results[key]["movement_every_five"].values())
+        results[key][MVMNT5_DB] = list(results[key][MVMNT5_DB].values())
+        print(key)
+        print((len(results[key][MVMNT5_DB])))
 
     return results
 

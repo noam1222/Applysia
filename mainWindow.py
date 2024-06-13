@@ -65,7 +65,6 @@ if __name__ == "__main__":
     import sys
     from mongoengine import connect
     result = connect(db="applysias", host="mongodb://localhost:27017/")
-    print(result)
     app = QtWidgets.QApplication(sys.argv)
     self = MainWindow()
     self.show()

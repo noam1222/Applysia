@@ -4,6 +4,7 @@ from datetime import datetime
 from .components import *
 from constants import *
 from widgets.report.report import Ui_ReportWidget
+from algo.analyze import analyze
 from db.controller import *
 class HomeWidget(QtWidgets.QWidget):
     def __init__(self, parent):
@@ -212,6 +213,7 @@ class HomeWidget(QtWidgets.QWidget):
         filePath, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Choose Video", "", "Video Files (*.mp4 *.avi *.mov)", options=options)
         if not filePath:
             return
+        # TODO check video duration is about an hour
         self.filePath = filePath
         videoName = filePath.split('/')[-1]
         self.chooseVideoBtn.setText(videoName)
@@ -264,6 +266,17 @@ class HomeWidget(QtWidgets.QWidget):
         if not self.filePath:
             QtWidgets.QMessageBox.warning(self, "Invalid Video", "Please Choose video.")
             return
+
+        # analyze the video
+        # TODO add loading modal
+        results = analyze(self.filePath)
+        if not results or results == {}:
+            QtWidgets.QMessageBox.warning(self, "Analysis Error", "There was an error while processing this video.")
+            return
+        # TODO handle error in save or in load reports
+        for app in results.keys():
+            trail_points = [{"x": x, "y": y} for (x, y) in results[app][TRAIL_POINTS_DB]]
+            add_report(self.dateTextEdit.text(), self.timeEditText.text(), app, trail_points, results[app][MVMNT5_DB])
         
         # get the report from DB
         reports = get_report_by_date_and_time(self.dateTextEdit.text(), self.timeEditText.text())
