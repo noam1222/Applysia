@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from datetime import timedelta
 
 from constants import *
+from widgets.report.drawer import AplysiaGridDrawer
 
 
 class Ui_ReportWidget(object):
@@ -220,39 +221,7 @@ class Ui_ReportWidget(object):
         self.drawerHorizontalLayout.setContentsMargins(20, -1, 20, -1)
         self.drawerHorizontalLayout.setObjectName("drawHorizontalLayout")
 
-        pixmap = QtGui.QPixmap(680, 250)
-        pixmap.fill(QtCore.Qt.white)
-        painter = QtGui.QPainter(pixmap)
-        pen = QtGui.QPen(QtCore.Qt.black, 2, QtCore.Qt.SolidLine)
-        painter.setPen(pen)
-        # Divide horizontally
-        painter.drawLine(0, 83, 680, 83)
-        painter.drawLine(0, 166, 680, 166)
-        # Divide vertically
-        painter.drawLine(136, 0, 136, 250)
-        painter.drawLine(272, 0, 272, 250)
-        painter.drawLine(408, 0, 408, 250)
-        painter.drawLine(544, 0, 544, 250)
-        # Draw applysia's numbers
-        i = 1
-        for y in (0, 83, 166):
-             for x in (0, 136, 272, 408, 544):
-                rect = QtCore.QRect(x, y, 15, 23)
-                painter.setBrush(QtGui.QColor(198, 190, 190, 54))
-                painter.setPen(QtGui.QColor(0, 0, 0, 100))
-                painter.drawRect(rect)
-                painter.setBrush(QtCore.Qt.NoBrush)
-                painter.setPen(QtCore.Qt.black)
-                painter.drawText(
-                        rect, QtCore.Qt.AlignCenter | QtCore.Qt.TextWordWrap, str(i))
-                i += 1
-
-        painter.end()
-
-        self.canvas = QtWidgets.QLabel()
-        self.canvas.setScaledContents(True)
-        self.canvas.setAlignment(QtCore.Qt.AlignCenter)
-        self.canvas.setPixmap(pixmap)
+        self.canvas = AplysiaGridDrawer(reports=self.reports)
 
         self.drawerHorizontalLayout.addWidget(self.canvas)
         self.mainVerticalLayout.addLayout(self.drawerHorizontalLayout)

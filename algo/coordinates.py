@@ -27,7 +27,7 @@ CAGES = {
     1: (C00, C01, C10, C11),
     2: (C01, C02, C11, C12),
     3: (C02, C03, C12, C13),
-    4: (C02, C04, C13, C14),
+    4: (C03, C04, C13, C14),
     5: (C04, C05, C14, C15),
     6: (C10, C11, C20, C21),
     7: (C11, C12, C21, C22),
@@ -41,6 +41,9 @@ CAGES = {
     15: (C24, C25, C34, C35)
 }
 
+REAL_CAGE_WIDTH = CAGES[4][1][0] - CAGES[4][0][0]
+REAL_CAGE_HEIGHT = CAGES[4][2][1] - CAGES[4][0][1]
+
 
 def get_cage_num(p):
     x, y = p
@@ -52,3 +55,21 @@ def get_cage_num(p):
         if x_left <= x <= x_right and y_top <= y <= y_bottom:
             return cage
     return None
+
+
+def get_point_in_relation_to_cage(p):
+    cage = get_cage_num(p)
+    if not cage:
+        return None
+    x, y = p
+    x_relate = x - CAGES[cage][0][0]
+    y_relate = y - CAGES[cage][0][1]
+    return x_relate, y_relate
+
+
+def norm_point_to_box(p, box_width, box_height):
+    x_relate_to_box, y_relate_to_box = get_point_in_relation_to_cage(p)
+    width_relation = box_width / REAL_CAGE_WIDTH
+    height_relation = box_height / REAL_CAGE_HEIGHT
+    return x_relate_to_box * width_relation, y_relate_to_box * height_relation
+
