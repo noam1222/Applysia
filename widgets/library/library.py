@@ -67,6 +67,8 @@ class LibraryWidget(QtWidgets.QWidget):
         item_app3 = QtWidgets.QTreeWidgetItem(self.treeWidget)
         item_app4 = QtWidgets.QTreeWidgetItem(self.treeWidget)
         item_app5 = QtWidgets.QTreeWidgetItem(self.treeWidget)
+        item_app6 = QtWidgets.QTreeWidgetItem(self.treeWidget)
+        item_app7 = QtWidgets.QTreeWidgetItem(self.treeWidget)
         self.treeWidget.header().setVisible(False)
         self.treeWidget.header().setCascadingSectionResizes(False)
         self.treeWidget.header().setDefaultSectionSize(100)
@@ -102,13 +104,13 @@ class LibraryWidget(QtWidgets.QWidget):
         item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget_2)
         item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget_2)
         item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget_2)
+        item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget_2)
         self.treeWidget_2.header().setVisible(False)
         self.treeWidget_2.header().setCascadingSectionResizes(False)
         self.treeWidget_2.header().setDefaultSectionSize(100)
         self.horizontalLayout.addWidget(self.treeWidget_2)
 
         # filter Vertical layout
-        # TODO add decoration
         self.filterVerticalLayout = QtWidgets.QVBoxLayout()
         self.filterVerticalLayout.setSpacing(15)
         self.filterVerticalLayout.setObjectName("filterVerticalLayout")
@@ -123,7 +125,7 @@ class LibraryWidget(QtWidgets.QWidget):
         self.filtersHeadlineLabel.setObjectName("filtersHeadlineLabel")
         self.filterVerticalLayout.addWidget(self.filtersHeadlineLabel, 0, QtCore.Qt.AlignHCenter)
 
-        # decoratin line
+        # decoration line
         self.line = QtWidgets.QFrame(self)
         self.line.setGeometry(QtCore.QRect(60, 80, 191, 16))
         self.line.setObjectName("line")
@@ -277,17 +279,20 @@ class LibraryWidget(QtWidgets.QWidget):
         self.treeWidget.topLevelItem(3).setText(0, _translate("LibraryWindow", "Aplysia 3"))
         self.treeWidget.topLevelItem(4).setText(0, _translate("LibraryWindow", "Aplysia 4"))
         self.treeWidget.topLevelItem(5).setText(0, _translate("LibraryWindow", "Aplysia 5"))
+        self.treeWidget.topLevelItem(6).setText(0, _translate("LibraryWindow", "Aplysia 6"))
+        self.treeWidget.topLevelItem(7).setText(0, _translate("LibraryWindow", "Aplysia 7"))
         self.treeWidget.setSortingEnabled(__sortingEnabled)
         self.treeWidget_2.headerItem().setText(0, _translate("LibraryWindow", "12.05.2024"))
         __sortingEnabled = self.treeWidget_2.isSortingEnabled()
         self.treeWidget_2.setSortingEnabled(False)
-        self.treeWidget_2.topLevelItem(0).setText(0, _translate("LibraryWindow", "Aplysia 6"))
-        self.treeWidget_2.topLevelItem(1).setText(0, _translate("LibraryWindow", "Aplysia 7"))
-        self.treeWidget_2.topLevelItem(2).setText(0, _translate("LibraryWindow", "Aplysia 8"))
-        self.treeWidget_2.topLevelItem(3).setText(0, _translate("LibraryWindow", "Aplysia 9"))
-        self.treeWidget_2.topLevelItem(4).setText(0, _translate("LibraryWindow", "Aplysia 10"))
-        self.treeWidget_2.topLevelItem(5).setText(0, _translate("LibraryWindow", "Aplysia 11"))
-        self.treeWidget_2.topLevelItem(6).setText(0, _translate("LibraryWindow", "Aplysia 12"))
+        self.treeWidget_2.topLevelItem(0).setText(0, _translate("LibraryWindow", "Aplysia 8"))
+        self.treeWidget_2.topLevelItem(1).setText(0, _translate("LibraryWindow", "Aplysia 9"))
+        self.treeWidget_2.topLevelItem(2).setText(0, _translate("LibraryWindow", "Aplysia 10"))
+        self.treeWidget_2.topLevelItem(3).setText(0, _translate("LibraryWindow", "Aplysia 11"))
+        self.treeWidget_2.topLevelItem(4).setText(0, _translate("LibraryWindow", "Aplysia 12"))
+        self.treeWidget_2.topLevelItem(5).setText(0, _translate("LibraryWindow", "Aplysia 13"))
+        self.treeWidget_2.topLevelItem(6).setText(0, _translate("LibraryWindow", "Aplysia 14"))
+        self.treeWidget_2.topLevelItem(7).setText(0, _translate("LibraryWindow", "Aplysia 15"))
         self.treeWidget_2.setSortingEnabled(__sortingEnabled)
         self.filtersHeadlineLabel.setText(_translate("LibraryWindow", "Filters"))
         self.label_4.setText(_translate("LibraryWindow", "Date:"))
@@ -344,13 +349,13 @@ class LibraryWidget(QtWidgets.QWidget):
 
     def filter(self, init=False):
         # Remove tree former content
-        for i in range(0, 6):
+        for i in range(0, 8):
             top_level_item = self.treeWidget.topLevelItem(i)
             if top_level_item is not None:
                 while top_level_item.childCount() > 0:
                     top_level_item.takeChild(0)
         k = 0
-        for i in range(6, 13):
+        for i in range(8, 16):
             top_level_item = self.treeWidget_2.topLevelItem(k)
             k += 1
             if top_level_item is not None:
@@ -390,7 +395,7 @@ class LibraryWidget(QtWidgets.QWidget):
 
         # print(self.reports)
 
-        times = [[] for i in range(13)]
+        times = [[] for i in range(16)]
         # for reports of All
         for report in reports[0]:
             app = 0
@@ -402,12 +407,12 @@ class LibraryWidget(QtWidgets.QWidget):
             t = str(report[TIME_DB].time())[:-3]
             times[app].append(QtWidgets.QTreeWidgetItem([t]))
 
-        for i in range(0, 6):
+        for i in range(0, 8):
             if len(times[i]) != 0:
                 self.treeWidget.topLevelItem(i).addChildren(times[i])
 
         k = 0
-        for i in range(6, 13):
+        for i in range(8, 16):
             if len(times[i]) != 0:
                 self.treeWidget_2.topLevelItem(k).addChildren(times[i])
             k += 1
