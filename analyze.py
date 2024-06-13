@@ -1,7 +1,7 @@
 import cv2 #openCV
 import torch
 
-from .coordinates import get_cage_num
+from coordinates import get_cage_num
 
 def calc_rec_center(x_right, y_top, x_left, y_bottom):
     x_center = x_left + ((x_right - x_left) / 2)
@@ -13,7 +13,7 @@ def is_different(p1, p2):
 
 def analyze(video_path):
     # Load the model
-    model = torch.hub.load("yolov5", 'custom', path="output/exp3/weights/best.pt", source="local")
+    model = torch.hub.load("yolov5", 'custom', path="output/exp5/weights/best.pt", source="local")
 
     # load the video
     capture = cv2.VideoCapture(video_path)
@@ -39,10 +39,12 @@ def analyze(video_path):
         ret, frame = capture.read()
         if not ret:
             break
+        five_counter += 1
 
         # start the analyze on this frame
-        results = model(frame)
-        for obj in results.pred[0]:
+        res = model(frame)
+        checked = [False for _ in range(15)] # safety in case the model recognize 2 applysias in same cage
+        for obj in res.pred[0]:
             x_right, y_top, x_left, y_bottom, confidence, category = obj.numpy()
             if confidence < 0.5:
                 continue
@@ -50,10 +52,14 @@ def analyze(video_path):
             center = calc_rec_center(x_right, y_top, x_left, y_bottom)
 
             app_num = get_cage_num(center)
+            if not app_num or checked[app_num-1]:
+                print("Unrecognize applysia")
+                continue
+            checked[app_num-1] = True
             if app_num not in results:
                 results[app_num] = {
                     "movement": 0,
-                    "movement_every_five": [],
+                    "movement_every_five": { i: 0.0 for i in range(12) },
                     "trail_points": [],
                     "last_five": (0, 0)
                 }
@@ -62,13 +68,21 @@ def analyze(video_path):
             results[app_num]["trail_points"].append(center)
 
             # if moved add to movement
-            if five_counter == 10: # there is 10 30-seconds in 5-minutes
-                five_counter = 0
+            if five_counter % 10 == 0: # there is 10 30-seconds in 5-minutes
                 if is_different(center, results[app_num]["last_five"]):
                     results[app_num]["last_five"] = center
-                    results[app_num]["movement_every_five"].append(1 / 12)
+                    results[app_num]["movement_every_five"][five_counter // 10] = 1 / 12
                     results[app_num]["movement"] += 1 / 12
                 else:
-                    results[app_num]["movement_every_five"].append(0.0)
+                    results[app_num]["movement_every_five"][five_counter // 10] = 0.0
+
+
+    for key in results:
+        results[key]["movement_every_five"] = list(results[key]["movement_every_five"].values())
 
     return results
+
+if __name__ == "__main__":
+    res = analyze("C:\\Users\\noam1\\OneDrive\\Desktop\\10h.mp4")
+    print(res[2])
+    print(len(res[2]["trail_points"]))
