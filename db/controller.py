@@ -46,18 +46,20 @@ def get_filtered_reports(date, start, end, movement, geq):
     """first filter reports by given date"""
     reports = Report.objects(date=date)
 
-    """filter reports by time range"""
-    reports = reports.filter(time__gte=start, time__lte=end)
-
     """filter reports by movement field"""
     if geq:
         reports = reports.filter(movement__gte=movement)
     else:
         reports = reports.filter(movement__lte=movement)
 
-    #TODO add all
     """sort by applysia num"""
     reports = reports.order_by('time')
+
+    """filter reports by time range"""
+    time_format = "%H:%M"
+    start_time = datetime.strptime(start, time_format)
+    end_time = datetime.strptime(end, time_format)
+    reports = [report for report in reports if start_time.hour <= report.time.hour <= end_time.hour]
 
     av_report = get_average_report_of_all(date, start, end)
 
