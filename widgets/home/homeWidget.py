@@ -266,6 +266,7 @@ class HomeWidget(QtWidgets.QWidget):
         if not self.filePath:
             QtWidgets.QMessageBox.warning(self, "Invalid Video", "Please Choose video.")
             return
+        # TODO check for duplicates (replace? delete first?)
 
         # analyze the video
         # TODO add loading modal
@@ -276,7 +277,7 @@ class HomeWidget(QtWidgets.QWidget):
         # TODO handle error in save or in load reports
         for app in results.keys():
             trail_points = [{"x": x, "y": y} for (x, y) in results[app][TRAIL_POINTS_DB]]
-            add_report(self.dateTextEdit.text(), self.timeEditText.text(), app, trail_points, results[app][MVMNT5_DB])
+            add_report(self.dateTextEdit.text(), self.timeEditText.text(), app, results[app][MOVEMENT_DB], trail_points, results[app][MVMNT5_DB])
         
         # get the report from DB
         reports = get_report_by_date_and_time(self.dateTextEdit.text(), self.timeEditText.text())

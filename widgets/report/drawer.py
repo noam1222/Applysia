@@ -55,6 +55,8 @@ class AplysiaGridDrawer(QtWidgets.QLabel):
                 painter.drawText(rect, QtCore.Qt.AlignCenter | QtCore.Qt.TextWordWrap, str(app))
 
                 # draw trail
+                # TODO fix color and thickness
+                # TODO change when specific aplysia?
                 for report in reports:
                     if report[APPLYSIA_DB] == app:
                         draw_trail_points(X[i], Y[j], X[i+1]-X[i], Y[j+1]-Y[j], painter, report[TRAIL_POINTS_DB])
