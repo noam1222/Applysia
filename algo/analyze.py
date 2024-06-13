@@ -1,7 +1,7 @@
 import cv2 #openCV
 import torch
 
-from coordinates import get_cage_num
+from .coordinates import get_cage_num
 
 def calc_rec_center(x_right, y_top, x_left, y_bottom):
     x_center = x_left + ((x_right - x_left) / 2)
@@ -13,7 +13,7 @@ def is_different(p1, p2):
 
 def analyze(video_path):
     # Load the model
-    model = torch.hub.load("yolov5", 'custom', path="output/exp5/weights/best.pt", source="local")
+    model = torch.hub.load("algo/yolov5", 'custom', path="algo/output/exp5/weights/best.pt", source="local")
 
     # load the video
     capture = cv2.VideoCapture(video_path)
@@ -41,7 +41,7 @@ def analyze(video_path):
             break
         five_counter += 1
 
-        # start the analyze on this frame
+        # start the analysis on this frame
         res = model(frame)
         checked = [False for _ in range(15)] # safety in case the model recognize 2 applysias in same cage
         for obj in res.pred[0]:
