@@ -1,0 +1,12 @@
+names:
+- Sea-Snails
+nc: 1
+roboflow:
+  license: Private
+  project: blue-snail
+  url: https://app.roboflow.com/applysia/blue-snail/9
+  version: 9
+  workspace: applysia
+test: ../test/images
+train: ../Blue-Snail-9/train/images
+val: ../Blue-Snail-9/valid/images
