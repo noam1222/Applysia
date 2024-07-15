@@ -8,6 +8,7 @@ from widgets.report.drawer import AplysiaGridDrawer
 class Ui_ReportWidget(object):
     def setupUi(self, ReportWidget, reports, current_aplysia=0):
         ReportWidget.setObjectName("ReportWidget")
+        ReportWidget.setWindowIcon(QtGui.QIcon(getImgPath("vision.png")))
         ReportWidget.setFixedSize(721, 761)
 
         self.reports = reports
