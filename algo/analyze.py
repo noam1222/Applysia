@@ -1,22 +1,29 @@
-import cv2 #openCV
+import cv2  # openCV
 import torch
+import pathlib
 
 from .coordinates import get_cage_num
 from constants import *
 
 LAST_FIVE = "last_five"
 
+
 def calc_rec_center(x_right, y_top, x_left, y_bottom):
     x_center = x_left + ((x_right - x_left) / 2)
     y_center = y_bottom + ((y_top - y_bottom) / 2)
     return (x_center, y_center)
 
-def is_different(p1, p2):
-    return p1 != p2
 
-def analyze(video_path):
+def is_different(p1, p2):
+    x1, y1 = p1
+    x2, y2 = p2
+    return abs(x2 - x1) > EPSILON or abs(y2 - y1) > EPSILON
+
+
+def analyze(video_path, progress_callback):
+    pathlib.PosixPath = pathlib.WindowsPath
     # Load the model
-    model = torch.hub.load("algo/yolov5", 'custom', path="algo/output/exp5/weights/best.pt", source="local")
+    model = torch.hub.load("algo/yolov5", 'custom', path="algo/output/exp13/weights/best.pt", source="local", force_reload=True)
 
     # load the video
     capture = cv2.VideoCapture(video_path)
@@ -35,7 +42,9 @@ def analyze(video_path):
 
     # Iterate through the video at 5-minute and 30-seconds intervals
     five_counter = 0
-    for frame_number in range(0, min(total_frames, one_hour_frames), frames_per_30_sec):
+    all_frames_number = min(total_frames, one_hour_frames)
+    for frame_number in range(0, all_frames_number, frames_per_30_sec):
+        progress_callback(int((frame_number / all_frames_number) * 100))
         # Set the video capture to the current frame
         capture.set(cv2.CAP_PROP_POS_FRAMES, frame_number)
         
@@ -44,7 +53,6 @@ def analyze(video_path):
         if not ret:
             break
         five_counter += 1
-        # TODO check why needed if already limit to 1 hour
         if five_counter // 10 > 11:  # another safety in case of more than an hour
             break
 
@@ -83,6 +91,7 @@ def analyze(video_path):
                 else:
                     results[app_num][MVMNT5_DB][five_counter // 10] = 0.0
 
+    progress_callback(100)
 
     for key in results:
         results[key][MVMNT5_DB] = list(results[key][MVMNT5_DB].values())
@@ -91,7 +100,4 @@ def analyze(video_path):
 
     return results
 
-if __name__ == "__main__":
-    res = analyze("C:\\Users\\noam1\\OneDrive\\Desktop\\10h.mp4")
-    print(res[2])
-    print(len(res[2]["trail_points"]))
+

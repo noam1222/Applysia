@@ -216,7 +216,6 @@ class Ui_ReportWidget(object):
         self.mainVerticalLayout.addLayout(self.horizontalLayout_2)
 
         # Draw canvas
-        # TODO draw
         self.drawerHorizontalLayout = QtWidgets.QHBoxLayout()
         self.drawerHorizontalLayout.setContentsMargins(20, -1, 20, -1)
         self.drawerHorizontalLayout.setObjectName("drawHorizontalLayout")

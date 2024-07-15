@@ -4,7 +4,7 @@ from datetime import datetime
 from .components import *
 from constants import *
 from widgets.report.report import Ui_ReportWidget
-from algo.analyze import analyze
+from .AnalyzeWorker import AnalyzeWorker
 from db.controller import *
 class HomeWidget(QtWidgets.QWidget):
     def __init__(self, parent):
@@ -268,17 +268,29 @@ class HomeWidget(QtWidgets.QWidget):
             return
         # TODO check for duplicates (replace? delete first?)
 
-        # analyze the video
+        # analyze the video on another thread
         # TODO add loading modal
-        results = analyze(self.filePath)
+        self.analyzeBtn.setEnabled(False)
+        self.progress_dialog = ProgressDialog.ProgressDialog()
+        self.progress_dialog.show()
+
+        self.worker = AnalyzeWorker(self.filePath)
+        self.worker.progress.connect(lambda value: self.progress_dialog.update_progress(value))
+        self.worker.finished.connect(self.on_analyze_finish)
+        self.worker.start()
+
+    def on_analyze_finish(self, results):
+        self.analyzeBtn.setEnabled(True)
+        self.progress_dialog.accept()
         if not results or results == {}:
             QtWidgets.QMessageBox.warning(self, "Analysis Error", "There was an error while processing this video.")
             return
         # TODO handle error in save or in load reports
         for app in results.keys():
             trail_points = [{"x": x, "y": y} for (x, y) in results[app][TRAIL_POINTS_DB]]
-            add_report(self.dateTextEdit.text(), self.timeEditText.text(), app, results[app][MOVEMENT_DB], trail_points, results[app][MVMNT5_DB])
-        
+            add_report(self.dateTextEdit.text(), self.timeEditText.text(), app, results[app][MOVEMENT_DB], trail_points,
+                       results[app][MVMNT5_DB])
+
         # get the report from DB
         reports = get_report_by_date_and_time(self.dateTextEdit.text(), self.timeEditText.text())
         # open the report
@@ -286,4 +298,3 @@ class HomeWidget(QtWidgets.QWidget):
         ui = Ui_ReportWidget()
         ui.setupUi(self.ReportWidget, reports)
         self.ReportWidget.show()
-

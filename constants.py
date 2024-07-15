@@ -16,6 +16,9 @@ TRAIL_POINTS_DB = "trail_points"
 MVMNT5_DB = "movement_every_five"
 ALL_APPLYSIAS = 0
 
+# TODO check if good epsilon
+EPSILON = 0.01
+
 def getIconPath(icon_name):
     return f"{ICONS_PATH}/{icon_name}"
 

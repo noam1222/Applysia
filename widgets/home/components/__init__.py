@@ -3,4 +3,4 @@ from .subHeadline import SubHeadline
 from .textEdit import TextEdit
 from .toolBtn import ToolBtn
 
-__all__ = ["HeadlineHome",  "SubHeadline", "TextEdit", "ToolBtn"]
+__all__ = ["HeadlineHome",  "SubHeadline", "TextEdit", "ToolBtn", "ProgressDialog"]
