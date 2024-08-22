@@ -233,8 +233,16 @@ class Ui_ReportWidget(object):
         self.exportHorizontalLayout.setObjectName("exportHorizontalLayout")
 
         self.exportExcel = QtWidgets.QFrame(self.verticalLayoutWidget)
-        self.exportExcel.setStyleSheet("background: rgba(152, 113, 113, 150);\n"
-                                       "border-radius: 10px 10px 10px 10px;")
+        self.exportExcel.setStyleSheet("""
+            QFrame {
+               background: #a2c85e;;
+               border-radius: 10px 10px 10px 10px;
+            }
+            QFrame:hover {
+                background: #acbe94;
+            }
+        """)
+        self.exportExcel.mousePressEvent = self.export_excel_clicked
         self.exportExcel.setObjectName("exportExcel")
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.exportExcel)
         self.horizontalLayout_5.setContentsMargins(-1, 5, 7, -1)
@@ -264,9 +272,17 @@ class Ui_ReportWidget(object):
         self.exportHorizontalLayout.addWidget(self.exportExcel)
 
         self.exportWord = QtWidgets.QFrame(self.verticalLayoutWidget)
-        self.exportWord.setStyleSheet("background: rgba(152, 113, 113, 150);\n"
-                                      "border-radius: 10px 10px 10px 10px;")
+        self.exportWord.setStyleSheet("""
+                    QFrame {
+                       background: #5356ea;;
+                       border-radius: 10px 10px 10px 10px;
+                    }
+                    QFrame:hover {
+                        background: #b1b4f4;
+                    }
+                """)
         self.exportWord.setObjectName("exportWord")
+        self.exportWord.mousePressEvent = self.export_word_clicked
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.exportWord)
         self.horizontalLayout_4.setContentsMargins(-1, 5, 7, -1)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
@@ -295,9 +311,17 @@ class Ui_ReportWidget(object):
         self.exportHorizontalLayout.addWidget(self.exportWord)
 
         self.exportVideo = QtWidgets.QFrame(self.verticalLayoutWidget)
-        self.exportVideo.setStyleSheet("background: rgba(152, 113, 113, 150);\n"
-                                       "border-radius: 10px 10px 10px 10px;")
+        self.exportVideo.setStyleSheet("""
+                            QFrame {
+                               background: #e74b54;;
+                               border-radius: 10px 10px 10px 10px;
+                            }
+                            QFrame:hover {
+                                background: #ef848a;
+                            }
+                        """)
         self.exportVideo.setObjectName("exportVideo")
+        self.exportVideo.mousePressEvent = self.export_video_clicked
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.exportVideo)
         self.horizontalLayout.setContentsMargins(-1, 7, 7, -1)
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -381,6 +405,15 @@ class Ui_ReportWidget(object):
                 item.setFont(font)
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
                 self.tableWidget.setItem(i, j, item)
+
+    def export_excel_clicked(self, e):
+        pass
+
+    def export_word_clicked(self, e):
+        pass
+
+    def export_video_clicked(self, e):
+        pass
 
              
 

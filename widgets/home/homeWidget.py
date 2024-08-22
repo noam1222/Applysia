@@ -268,7 +268,6 @@ class HomeWidget(QtWidgets.QWidget):
         if not self.filePath:
             QtWidgets.QMessageBox.warning(self, "Invalid Video", "Please Choose video.")
             return
-        # TODO check for duplicates (replace? delete first?)
         # Check if already exist
         if get_report_by_date_and_time(date, time):
             msg = QtWidgets.QMessageBox()
