@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
+# TODO: on each function check usage and add error handling
+
 def add_report(date, time, applysia, movement, trail_points, movement_array):
     report = Report(
         date=date,
