@@ -407,21 +407,21 @@ class Ui_ReportWidget(object):
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
                 self.tableWidget.setItem(i, j, item)
 
-    def get_file_path(self, type):
+    def get_file_path(self, e_type):
         options = QtWidgets.QFileDialog.Options()
         curr_app_str = "all" if self.curr_app == 0 else f"app{self.curr_app}"
         time_str = f"{self.reports[self.curr_app][TIME_DB]}".replace(":", "-")
         file_name = f"{curr_app_str} {time_str}"
-        if type == "Excel":
+        if e_type == "Excel":
             type_str = "xlsx"
-        elif type == "Word":
+        elif e_type == "Word":
             type_str = "docx"
-        elif type == "MP4":
+        elif e_type == "MP4":
             type_str = "mp4"
         else:
             return
         filePath, _ = QtWidgets.QFileDialog.getSaveFileName(self.report_widget, f"Export to {type}", file_name,
-                                                            f"{type} Files (*.{type_str});;All Files (*)",
+                                                            f"{e_type} Files (*.{type_str});;All Files (*)",
                                                             options=options)
         return filePath
 
@@ -436,6 +436,10 @@ class Ui_ReportWidget(object):
             return
 
     def export_video_clicked(self, e):
+        if self.curr_app == 0:
+            QtWidgets.QMessageBox.information(self.report_widget, "Ooops..",
+                                              "There are no support for multiple applysias movement video.")
+            return
         file_path = self.get_file_path("MP4")
         if not file_path:
             return
