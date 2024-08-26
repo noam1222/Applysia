@@ -1,4 +1,4 @@
-from mongoengine import Document, fields, connect
+from mongoengine import Document, fields
 
 
 # Define the Report document

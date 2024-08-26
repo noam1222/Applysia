@@ -4,6 +4,7 @@ from datetime import datetime
 from .components import *
 from constants import *
 from widgets.report.report import Ui_ReportWidget
+from .AnalyzeWorker import AnalyzeWorker
 from db.controller import *
 class HomeWidget(QtWidgets.QWidget):
     def __init__(self, parent):
@@ -212,6 +213,7 @@ class HomeWidget(QtWidgets.QWidget):
         filePath, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Choose Video", "", "Video Files (*.mp4 *.avi *.mov)", options=options)
         if not filePath:
             return
+        # TODO check video duration is about an hour
         self.filePath = filePath
         videoName = filePath.split('/')[-1]
         self.chooseVideoBtn.setText(videoName)
@@ -253,23 +255,55 @@ class HomeWidget(QtWidgets.QWidget):
 
     def analyzeBtnClicked(self):
         # check for correct date input
-        if self.dateTextEdit.text() == "":
+        date = self.dateTextEdit.text()
+        time = self.timeEditText.text()
+        if date == "":
             QtWidgets.QMessageBox.warning(self, "Invalid Date", "Please enter a valid date (use the calendar icon)")
             return
         # check for correct time input
-        if not self.timeEditText.validator().regExp().exactMatch(self.timeEditText.text()):
+        if not self.timeEditText.validator().regExp().exactMatch(time):
             QtWidgets.QMessageBox.warning(self, "Invalid Time", "Please enter a valid time in the format HH:MM.")
             return
         # check if user choose video
         if not self.filePath:
             QtWidgets.QMessageBox.warning(self, "Invalid Video", "Please Choose video.")
             return
-        
+        # Check if already exist
+        if get_report_by_date_and_time(date, time):
+            msg = QtWidgets.QMessageBox()
+            msg.setIcon(QtWidgets.QMessageBox.Warning)
+            msg.setWindowTitle("Warning")
+            msg.setText("There is existing report on this date and time.\n Are you want to replace it?")
+            msg.setStandardButtons(QtWidgets.QMessageBox.Ok | QtWidgets.QMessageBox.Cancel)
+            if msg.exec_() == QtWidgets.QMessageBox.Ok:
+                delete_all_reports_by_date_and_time(date, time)
+            else:
+                return
+
+        # analyze the video on another thread
+        self.analyzeBtn.setEnabled(False)
+        self.progress_dialog = ProgressDialog.ProgressDialog()
+        self.progress_dialog.show()
+
+        self.worker = AnalyzeWorker(self.filePath)
+        self.worker.progress.connect(lambda value: self.progress_dialog.update_progress(value))
+        self.worker.finished.connect(lambda results: self.on_analyze_finish(results, date, time))
+        self.worker.start()
+
+    def on_analyze_finish(self, results, date, time):
+        self.analyzeBtn.setEnabled(True)
+        self.progress_dialog.accept()
+        if not results or results == {}:
+            QtWidgets.QMessageBox.warning(self, "Analysis Error", "There was an error while processing this video.")
+            return
+        for app in results.keys():
+            trail_points = [{"x": x, "y": y} for (x, y) in results[app][TRAIL_POINTS_DB]]
+            add_report(date, time, app, results[app][MOVEMENT_DB], trail_points, results[app][MVMNT5_DB])
+
         # get the report from DB
-        reports = get_report_by_date_and_time(self.dateTextEdit.text(), self.timeEditText.text())
+        reports = get_report_by_date_and_time(date, time)
         # open the report
         self.ReportWidget = QtWidgets.QWidget()
         ui = Ui_ReportWidget()
         ui.setupUi(self.ReportWidget, reports)
         self.ReportWidget.show()
-

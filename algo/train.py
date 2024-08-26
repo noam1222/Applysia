@@ -3,6 +3,7 @@ from pathlib import Path
 from roboflow import Roboflow
 from shutil import copyfile
 import subprocess
+
 import os
 
 # Initialize Roboflow
@@ -29,7 +30,7 @@ subprocess.run(["git", "clone", "https://github.com/ultralytics/yolov5.git"])
 subprocess.run(["pip", "install", "-U", "-r", "yolov5/requirements.txt"])
 
 # Prepare data.yaml file
-copyfile(data_yaml, "data.yaml") #TODO need to add "../" in the beginning of val and train. 
+copyfile(data_yaml, "data.yaml") #need to add "../" in the beginning of val and train.
 
 # Train YOLOv5 model
 weights = "yolov5s.pt"  # Pretrained weights (or path to your custom trained weights)

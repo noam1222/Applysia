@@ -2,15 +2,18 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from datetime import timedelta
 
 from constants import *
+from widgets.report.drawer import AplysiaGridDrawer
 
 
 class Ui_ReportWidget(object):
     def setupUi(self, ReportWidget, reports, current_aplysia=0):
         ReportWidget.setObjectName("ReportWidget")
+        ReportWidget.setWindowIcon(QtGui.QIcon(getImgPath("vision.png")))
         ReportWidget.setFixedSize(721, 761)
 
         self.reports = reports
         self.curr_app = current_aplysia
+        self.report_widget = ReportWidget
 
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(255, 253, 208))
@@ -215,44 +218,11 @@ class Ui_ReportWidget(object):
         self.mainVerticalLayout.addLayout(self.horizontalLayout_2)
 
         # Draw canvas
-        # TODO draw
         self.drawerHorizontalLayout = QtWidgets.QHBoxLayout()
         self.drawerHorizontalLayout.setContentsMargins(20, -1, 20, -1)
         self.drawerHorizontalLayout.setObjectName("drawHorizontalLayout")
 
-        pixmap = QtGui.QPixmap(680, 250)
-        pixmap.fill(QtCore.Qt.white)
-        painter = QtGui.QPainter(pixmap)
-        pen = QtGui.QPen(QtCore.Qt.black, 2, QtCore.Qt.SolidLine)
-        painter.setPen(pen)
-        # Divide horizontally
-        painter.drawLine(0, 83, 680, 83)
-        painter.drawLine(0, 166, 680, 166)
-        # Divide vertically
-        painter.drawLine(136, 0, 136, 250)
-        painter.drawLine(272, 0, 272, 250)
-        painter.drawLine(408, 0, 408, 250)
-        painter.drawLine(544, 0, 544, 250)
-        # Draw applysia's numbers
-        i = 1
-        for y in (0, 83, 166):
-             for x in (0, 136, 272, 408, 544):
-                rect = QtCore.QRect(x, y, 15, 23)
-                painter.setBrush(QtGui.QColor(198, 190, 190, 54))
-                painter.setPen(QtGui.QColor(0, 0, 0, 100))
-                painter.drawRect(rect)
-                painter.setBrush(QtCore.Qt.NoBrush)
-                painter.setPen(QtCore.Qt.black)
-                painter.drawText(
-                        rect, QtCore.Qt.AlignCenter | QtCore.Qt.TextWordWrap, str(i))
-                i += 1
-
-        painter.end()
-
-        self.canvas = QtWidgets.QLabel()
-        self.canvas.setScaledContents(True)
-        self.canvas.setAlignment(QtCore.Qt.AlignCenter)
-        self.canvas.setPixmap(pixmap)
+        self.canvas = AplysiaGridDrawer(reports=self.reports)
 
         self.drawerHorizontalLayout.addWidget(self.canvas)
         self.mainVerticalLayout.addLayout(self.drawerHorizontalLayout)
@@ -264,8 +234,16 @@ class Ui_ReportWidget(object):
         self.exportHorizontalLayout.setObjectName("exportHorizontalLayout")
 
         self.exportExcel = QtWidgets.QFrame(self.verticalLayoutWidget)
-        self.exportExcel.setStyleSheet("background: rgba(152, 113, 113, 150);\n"
-                                       "border-radius: 10px 10px 10px 10px;")
+        self.exportExcel.setStyleSheet("""
+            QFrame {
+               background: #a2c85e;;
+               border-radius: 10px 10px 10px 10px;
+            }
+            QFrame:hover {
+                background: #acbe94;
+            }
+        """)
+        self.exportExcel.mousePressEvent = self.export_excel_clicked
         self.exportExcel.setObjectName("exportExcel")
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.exportExcel)
         self.horizontalLayout_5.setContentsMargins(-1, 5, 7, -1)
@@ -295,9 +273,17 @@ class Ui_ReportWidget(object):
         self.exportHorizontalLayout.addWidget(self.exportExcel)
 
         self.exportWord = QtWidgets.QFrame(self.verticalLayoutWidget)
-        self.exportWord.setStyleSheet("background: rgba(152, 113, 113, 150);\n"
-                                      "border-radius: 10px 10px 10px 10px;")
+        self.exportWord.setStyleSheet("""
+                    QFrame {
+                       background: #5356ea;;
+                       border-radius: 10px 10px 10px 10px;
+                    }
+                    QFrame:hover {
+                        background: #b1b4f4;
+                    }
+                """)
         self.exportWord.setObjectName("exportWord")
+        self.exportWord.mousePressEvent = self.export_word_clicked
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.exportWord)
         self.horizontalLayout_4.setContentsMargins(-1, 5, 7, -1)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
@@ -326,9 +312,17 @@ class Ui_ReportWidget(object):
         self.exportHorizontalLayout.addWidget(self.exportWord)
 
         self.exportVideo = QtWidgets.QFrame(self.verticalLayoutWidget)
-        self.exportVideo.setStyleSheet("background: rgba(152, 113, 113, 150);\n"
-                                       "border-radius: 10px 10px 10px 10px;")
+        self.exportVideo.setStyleSheet("""
+                            QFrame {
+                               background: #e74b54;;
+                               border-radius: 10px 10px 10px 10px;
+                            }
+                            QFrame:hover {
+                                background: #ef848a;
+                            }
+                        """)
         self.exportVideo.setObjectName("exportVideo")
+        self.exportVideo.mousePressEvent = self.export_video_clicked
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.exportVideo)
         self.horizontalLayout.setContentsMargins(-1, 7, 7, -1)
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -413,7 +407,44 @@ class Ui_ReportWidget(object):
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
                 self.tableWidget.setItem(i, j, item)
 
-             
+    def get_file_path(self, e_type):
+        options = QtWidgets.QFileDialog.Options()
+        curr_app_str = "all" if self.curr_app == 0 else f"app{self.curr_app}"
+        time_str = f"{self.reports[self.curr_app][TIME_DB]}".replace(":", "-")
+        file_name = f"{curr_app_str} {time_str}"
+        if e_type == "Excel":
+            type_str = "xlsx"
+        elif e_type == "Word":
+            type_str = "docx"
+        elif e_type == "MP4":
+            type_str = "mp4"
+        else:
+            return
+        filePath, _ = QtWidgets.QFileDialog.getSaveFileName(self.report_widget, f"Export to {type}", file_name,
+                                                            f"{e_type} Files (*.{type_str});;All Files (*)",
+                                                            options=options)
+        return filePath
+
+    def export_excel_clicked(self, e):
+        file_path = self.get_file_path("Excel")
+        if not file_path:
+            return
+
+    def export_word_clicked(self, e):
+        file_path = self.get_file_path("Word")
+        if not file_path:
+            return
+
+    def export_video_clicked(self, e):
+        if self.curr_app == 0:
+            QtWidgets.QMessageBox.information(self.report_widget, "Ooops..",
+                                              "There are no support for multiple applysias movement video.")
+            return
+        file_path = self.get_file_path("MP4")
+        if not file_path:
+            return
+
+
 
 
 if __name__ == "__main__":

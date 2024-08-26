@@ -7,8 +7,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def add_report(date, time, applysia, trail_points, movement_array):
-    movement = np.mean(movement_array)
+# TODO: on each function check usage and add error handling
+
+def add_report(date, time, applysia, movement, trail_points, movement_array):
     report = Report(
         date=date,
         time=time,

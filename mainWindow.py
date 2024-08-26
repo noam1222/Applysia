@@ -15,7 +15,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # main window
         self.setObjectName("mainWindow")
         self.setWindowTitle("APPLYSIA")
-        # TODO change window icon
+        self.setWindowIcon(QtGui.QIcon(getImgPath("vision.png")))
         self.setFixedSize(1000, 750)
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
@@ -65,7 +65,6 @@ if __name__ == "__main__":
     import sys
     from mongoengine import connect
     result = connect(db="applysias", host="mongodb://localhost:27017/")
-    print(result)
     app = QtWidgets.QApplication(sys.argv)
     self = MainWindow()
     self.show()
