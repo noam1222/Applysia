@@ -20,7 +20,7 @@ def is_different(p1, p2):
     return abs(x2 - x1) > EPSILON or abs(y2 - y1) > EPSILON
 
 
-def analyze(video_path, progress_callback):
+def analyze(video_path, video_speed, progress_callback):
     pathlib.PosixPath = pathlib.WindowsPath
     # Load the model
     model = torch.hub.load("algo/yolov5", 'custom', path="algo/output/exp13/weights/best.pt", source="local", force_reload=True)
@@ -36,9 +36,9 @@ def analyze(video_path, progress_callback):
     # TODO handle different video speeds
     fps = capture.get(cv2.CAP_PROP_FPS)  # Frames per second
     total_frames = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
-    one_hour_frames = int(60 * 60 * fps)
+    one_hour_frames = int(60 * (60 / video_speed) * fps)
     # Calculate the number of frames for every half minute
-    frames_per_30_sec = int(0.5 * 60 * fps)  # half minute * 60 seconds * fps
+    frames_per_30_sec = int(0.5 * (60 / video_speed) * fps)  # half minute * 60 seconds * fps
 
     # Iterate through the video at 5-minute and 30-seconds intervals
     five_counter = 0
