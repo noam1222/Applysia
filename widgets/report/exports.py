@@ -7,6 +7,11 @@ from docx import Document
 from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.shared import Pt
 
+from constants import TIME_DB, APPLYSIA_DB, ALL_APPLYSIAS
+
+
+def _get_time_from_format(time):
+    return str(time).split(" ")[1][:-3]
 
 def export_report_to_excel(report, file_path):
 
@@ -16,9 +21,14 @@ def export_report_to_excel(report, file_path):
 
     # Extract keys and values from report dictionary
     for key, value in report.items():
-        if key != "_id":
-            keys.append(key)
-            values.append(value)
+        if key == "_id":
+            continue
+        keys.append(key)
+        if key == TIME_DB:
+            value = _get_time_from_format(value)
+        elif key == APPLYSIA_DB and value == ALL_APPLYSIAS:
+            value = "all"
+        values.append(value)
 
     # Create DataFrame with keys and values as separate columns
     df = pd.DataFrame({'Key': keys, 'Value': values})
@@ -43,10 +53,15 @@ def export_report_to_word(report, path):
 
     # Populate the table with report data
     for key, value in report.items():
-        if key != "_id":
-            row_cells = table.add_row().cells
-            row_cells[0].text = key
-            row_cells[1].text = str(value)
+        if key == "_id":
+            continue
+        row_cells = table.add_row().cells
+        row_cells[0].text = key
+        if key == TIME_DB:
+            value = _get_time_from_format(str(value))
+        elif key == APPLYSIA_DB and value == ALL_APPLYSIAS:
+            value = "all"
+        row_cells[1].text = str(value)
 
     # Adjust table cell widths
     for row in table.rows:

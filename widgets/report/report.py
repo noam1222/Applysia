@@ -1,3 +1,5 @@
+import copy
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 from datetime import timedelta
 
@@ -408,10 +410,14 @@ class Ui_ReportWidget(object):
                 self.tableWidget.setItem(i, j, item)
 
     def get_file_path(self, e_type):
-        options = QtWidgets.QFileDialog.Options()
-        curr_app_str = "all" if self.curr_app == 0 else f"app{self.reports[self.curr_app][APPLYSIA_DB]}"
-        time_str = f"{self.reports[self.curr_app][TIME_DB]}".replace(":", "-")
-        file_name = f"{curr_app_str} {time_str}"
+        app_num = self.reports[self.curr_app][APPLYSIA_DB]
+        curr_app_str = "all" if self.curr_app == 0 else f"app{app_num}"
+
+        time = f"{self.reports[self.curr_app][TIME_DB]}".split(' ')[1].replace(":", "-")
+        date_time = f"{self.reports[self.curr_app][DATE_DB]} {time}".replace("/", "-")
+
+        file_name = f"{curr_app_str} {date_time}"
+
         if e_type == "Excel":
             type_str = "xlsx"
         elif e_type == "Word":
@@ -420,10 +426,12 @@ class Ui_ReportWidget(object):
             type_str = "gif"
         else:
             return
-        filePath, _ = QtWidgets.QFileDialog.getSaveFileName(self.report_widget, f"Export to {e_type}", file_name,
+
+        options = QtWidgets.QFileDialog.Options()
+        file_path, _ = QtWidgets.QFileDialog.getSaveFileName(self.report_widget, f"Export to {e_type}", file_name,
                                                             f"{e_type} Files (*.{type_str});;All Files (*)",
                                                             options=options)
-        return filePath
+        return file_path
 
     def export_excel_clicked(self, e):
         file_path = self.get_file_path("Excel")
