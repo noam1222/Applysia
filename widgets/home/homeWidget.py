@@ -164,9 +164,6 @@ class HomeWidget(QtWidgets.QWidget):
                                               "padding: 4px 4px 4px 4px;")
         self.videoSpeedComboBox.setObjectName("videoSpeedComboBox")
         self.videoSpeedComboBox.addItem("1.0")
-        self.videoSpeedComboBox.addItem("1.25")
-        self.videoSpeedComboBox.addItem("1.5")
-        self.videoSpeedComboBox.addItem("1.75")
         self.videoSpeedComboBox.addItem("2.0")
         self.horizontalLayout_9.addWidget(self.videoSpeedComboBox)
 
@@ -285,7 +282,8 @@ class HomeWidget(QtWidgets.QWidget):
         self.progress_dialog = ProgressDialog.ProgressDialog()
         self.progress_dialog.show()
 
-        self.worker = AnalyzeWorker(self.filePath)
+        video_speed = self.videoSpeedComboBox.currentIndex() + 1
+        self.worker = AnalyzeWorker(self.filePath, video_speed)
         self.worker.progress.connect(lambda value: self.progress_dialog.update_progress(value))
         self.worker.finished.connect(lambda results: self.on_analyze_finish(results, date, time))
         self.worker.start()
