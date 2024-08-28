@@ -3,7 +3,7 @@ from datetime import timedelta
 
 from constants import *
 from widgets.report.drawer import AplysiaGridDrawer
-
+from .exports import *
 
 class Ui_ReportWidget(object):
     def setupUi(self, ReportWidget, reports, current_aplysia=0):
@@ -409,18 +409,18 @@ class Ui_ReportWidget(object):
 
     def get_file_path(self, e_type):
         options = QtWidgets.QFileDialog.Options()
-        curr_app_str = "all" if self.curr_app == 0 else f"app{self.curr_app}"
+        curr_app_str = "all" if self.curr_app == 0 else f"app{self.reports[self.curr_app][APPLYSIA_DB]}"
         time_str = f"{self.reports[self.curr_app][TIME_DB]}".replace(":", "-")
         file_name = f"{curr_app_str} {time_str}"
         if e_type == "Excel":
             type_str = "xlsx"
         elif e_type == "Word":
             type_str = "docx"
-        elif e_type == "MP4":
-            type_str = "mp4"
+        elif e_type == "Video":
+            type_str = "gif"
         else:
             return
-        filePath, _ = QtWidgets.QFileDialog.getSaveFileName(self.report_widget, f"Export to {type}", file_name,
+        filePath, _ = QtWidgets.QFileDialog.getSaveFileName(self.report_widget, f"Export to {e_type}", file_name,
                                                             f"{e_type} Files (*.{type_str});;All Files (*)",
                                                             options=options)
         return filePath
@@ -429,20 +429,23 @@ class Ui_ReportWidget(object):
         file_path = self.get_file_path("Excel")
         if not file_path:
             return
+        export_report_to_excel(self.reports[self.curr_app], file_path)
 
     def export_word_clicked(self, e):
         file_path = self.get_file_path("Word")
         if not file_path:
             return
+        export_report_to_word(self.reports[self.curr_app], file_path)
 
     def export_video_clicked(self, e):
         if self.curr_app == 0:
             QtWidgets.QMessageBox.information(self.report_widget, "Ooops..",
                                               "There are no support for multiple applysias movement video.")
             return
-        file_path = self.get_file_path("MP4")
+        file_path = self.get_file_path("Video")
         if not file_path:
             return
+        draw_path_video(self.reports[self.curr_app], file_path)
 
 
 

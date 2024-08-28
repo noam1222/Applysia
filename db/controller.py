@@ -30,7 +30,8 @@ def get_all_reports():
 
 # receives 2 strings as input representing date + time, returns cursor
 def get_report_by_date_and_time(date, time):
-    reports = Report.objects(date=date, time=time).order_by('applysia')
+    time_format = datetime.strptime(f"{date} {time}", "%d/%m/%y %H:%M")
+    reports = Report.objects(date=date, time=time_format).order_by('applysia')
 
     reports_list = [report.to_mongo().to_dict() for report in reports]
     if len(reports_list) == 0:
@@ -134,6 +135,7 @@ def get_average_report_of_all(date, time, end_time=None):
         current_time = start_time
         while current_time <= e_time:
             time_string = current_time.strftime("%H:%M")
+            time_string = datetime.strptime(f"{date} {time_string}", "%d/%m/%y %H:%M")
             reports = Report.objects(date=date, time=time_string)
             if reports:
                 hour_average = calc_average_of_hour(date, current_time, reports)
@@ -145,7 +147,9 @@ def get_average_report_of_all(date, time, end_time=None):
             return json.dumps({})
 
     else:
-        reports = Report.objects(date=date, time=time)
+        time_string = start_time.strftime("%H:%M")
+        time_string = datetime.strptime(f"{date} {time_string}", "%d/%m/%y %H:%M")
+        reports = Report.objects(date=date, time=time_string)
         if reports:
             average_rep = calc_average_of_hour(date, start_time, reports)
             return average_rep
