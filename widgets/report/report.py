@@ -409,7 +409,7 @@ class Ui_ReportWidget(object):
 
     def get_file_path(self, e_type):
         options = QtWidgets.QFileDialog.Options()
-        curr_app_str = "all" if self.curr_app == 0 else f"app{self.report_widget[self.curr_app][APPLYSIA_DB]}"
+        curr_app_str = "all" if self.curr_app == 0 else f"app{self.reports[self.curr_app][APPLYSIA_DB]}"
         time_str = f"{self.reports[self.curr_app][TIME_DB]}".replace(":", "-")
         file_name = f"{curr_app_str} {time_str}"
         if e_type == "Excel":
