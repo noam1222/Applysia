@@ -100,7 +100,7 @@ def draw_path_video(report, output_file, fps=10, smooth_factor=1000):
         elif isinstance(p, tuple):
             x, y = int(p[0]), int(p[1])
         else:
-            raise ValueError("Unsupported point format")
+            return
         normalized_point = norm_point_to_box((x, y), 10, 5)
         normalized_points.append({'x': normalized_point[0], 'y': normalized_point[1]})
 
