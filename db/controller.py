@@ -7,12 +7,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-# TODO: on each function check usage and add error handling
+def _get_time_formatted(date, time):
+    return datetime.strptime(f"{date} {time}", "%d/%m/%y %H:%M")
 
 def add_report(date, time, applysia, movement, trail_points, movement_array):
+    time_format = _get_time_formatted(date, time)
     report = Report(
         date=date,
-        time=time,
+        time=time_format,
         movement=movement,
         applysia=applysia,
         trail_points=trail_points,
@@ -21,7 +23,6 @@ def add_report(date, time, applysia, movement, trail_points, movement_array):
     report.save()
     return report
 
-#print(add_report("afafafaf", "test2", 4.5, 2, [{'x': 1, 'y': 2}, {'x': 3, 'y': 4}, {'x': 5, 'y': 6}]))
 
 # returns cursor with all reports, to access individually iterate over cursor
 def get_all_reports():
@@ -30,7 +31,7 @@ def get_all_reports():
 
 # receives 2 strings as input representing date + time, returns cursor
 def get_report_by_date_and_time(date, time):
-    time_format = datetime.strptime(f"{date} {time}", "%d/%m/%y %H:%M")
+    time_format = _get_time_formatted(date, time)
     reports = Report.objects(date=date, time=time_format).order_by('applysia')
 
     reports_list = [report.to_mongo().to_dict() for report in reports]
@@ -135,7 +136,7 @@ def get_average_report_of_all(date, time, end_time=None):
         current_time = start_time
         while current_time <= e_time:
             time_string = current_time.strftime("%H:%M")
-            time_string = datetime.strptime(f"{date} {time_string}", "%d/%m/%y %H:%M")
+            time_string = _get_time_formatted(date, time_string)
             reports = Report.objects(date=date, time=time_string)
             if reports:
                 hour_average = calc_average_of_hour(date, current_time, reports)
@@ -148,7 +149,7 @@ def get_average_report_of_all(date, time, end_time=None):
 
     else:
         time_string = start_time.strftime("%H:%M")
-        time_string = datetime.strptime(f"{date} {time_string}", "%d/%m/%y %H:%M")
+        time_string = _get_time_formatted(date, time_string)
         reports = Report.objects(date=date, time=time_string)
         if reports:
             average_rep = calc_average_of_hour(date, start_time, reports)
