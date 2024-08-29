@@ -8,6 +8,7 @@ from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.shared import Pt
 
 from constants import TIME_DB, APPLYSIA_DB, ALL_APPLYSIAS
+from algo.coordinates import norm_point_to_box
 
 
 def _get_time_from_format(time):
@@ -89,6 +90,23 @@ def draw_path_video(report, output_file, fps=10, smooth_factor=1000):
     # Extract trail points and applysia number from the report
     points = report['trail_points']
     applysia_num = report['applysia']
+
+
+    # Normalize all points (assuming norm_point_to_box works with tuples)
+    normalized_points = []
+    for p in points:
+        if isinstance(p, dict):
+            x, y = int(p['x']), int(p['y'])
+        elif isinstance(p, tuple):
+            x, y = int(p[0]), int(p[1])
+        else:
+            raise ValueError("Unsupported point format")
+        normalized_point = norm_point_to_box((x, y), 10, 5)
+        normalized_points.append({'x': normalized_point[0], 'y': normalized_point[1]})
+
+    # Use normalized points for further processing
+    points = normalized_points
+
     # Create a figure and axis
     fig, ax = plt.subplots()
 
