@@ -1,7 +1,7 @@
 import json
 from datetime import datetime, timedelta
 
-from .reportModel import Report
+from db.reportModel import Report
 from mongoengine import connect
 import matplotlib.pyplot as plt
 import numpy as np
@@ -10,13 +10,16 @@ import numpy as np
 # TODO: on each function check usage and add error handling
 
 def add_report(date, time, applysia, movement, trail_points, movement_array):
+    formatted_movement = round(movement, 2)
+
+    formatted_movement_array = [round(num, 2) for num in movement_array]
     report = Report(
         date=date,
         time=time,
-        movement=movement,
+        movement=formatted_movement,
         applysia=applysia,
         trail_points=trail_points,
-        movement_every_five=movement_array
+        movement_every_five=formatted_movement_array
     )
     report.save()
     return report
