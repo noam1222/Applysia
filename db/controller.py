@@ -1,7 +1,7 @@
 import json
 from datetime import datetime, timedelta
 
-from .reportModel import Report
+from db.reportModel import Report
 from mongoengine import connect
 import matplotlib.pyplot as plt
 import numpy as np
@@ -11,14 +11,16 @@ def _get_time_formatted(date, time):
     return datetime.strptime(f"{date} {time}", "%d/%m/%y %H:%M")
 
 def add_report(date, time, applysia, movement, trail_points, movement_array):
+    formatted_movement = round(movement, 2)
+    formatted_movement_array = [round(num, 2) for num in movement_array]
     time_format = _get_time_formatted(date, time)
     report = Report(
         date=date,
         time=time_format,
-        movement=movement,
+        movement=formatted_movement,
         applysia=applysia,
         trail_points=trail_points,
-        movement_every_five=movement_array
+        movement_every_five=formatted_movement_array
     )
     report.save()
     return report

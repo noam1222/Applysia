@@ -61,12 +61,13 @@ CAGES = {
 }
 
 def get_cage_num(p):
-    x, y = p
+    # Convert x and y to integers
+    x, y = int(p[0]), int(p[1])
     for cage, corners in CAGES.items():
         x_left = corners[0][0]
         x_right = corners[1][0]
         y_top = corners[0][1]
-        y_bottom = corners[2][1] 
+        y_bottom = corners[2][1]
         if x_left <= x <= x_right and y_top <= y <= y_bottom:
             return cage
     return None
@@ -75,7 +76,7 @@ def get_cage_num(p):
 def get_point_in_relation_to_cage(p, cage):
     if not cage:
         return None
-    x, y = p
+    x, y = int(p[0]), int(p[1])
     x_relate = x - CAGES[cage][0][0]
     y_relate = y - CAGES[cage][0][1]
     return x_relate, y_relate
