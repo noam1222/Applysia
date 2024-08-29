@@ -124,6 +124,8 @@ def draw_path_video(report, output_file, fps=10, smooth_factor=1000):
     ax.set_xlim(min(x_smooth) - 1, max(x_smooth) + 1)
     ax.set_ylim(min(y_smooth) - 1, max(y_smooth) + 1)
 
+    ax.invert_yaxis()
+
     # Remove numbers on x and y axes
     ax.set_xticks([])
     ax.set_yticks([])
