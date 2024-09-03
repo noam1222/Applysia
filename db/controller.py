@@ -10,6 +10,12 @@ import numpy as np
 def _get_time_formatted(date, time):
     return datetime.strptime(f"{date} {time}", "%d/%m/%y %H:%M")
 
+
+def _filter_reports_by_movement(reports, movement, gte):
+    if gte:
+        return reports.filter(movement__gte=movement)
+    return reports.filter(movement__lte=movement)
+
 def add_report(date, time, applysia, movement, trail_points, movement_array):
     formatted_movement = round(movement, 2)
     formatted_movement_array = [round(num, 2) for num in movement_array]
@@ -46,16 +52,13 @@ def get_report_by_date_and_time(date, time):
 
     return reports_list
 
-def get_filtered_reports(date, start, end, movement, geq):
+def get_filtered_reports(date, start, end, movement, gte):
 
     """first filter reports by given date"""
     reports = Report.objects(date=date)
 
     """filter reports by movement field"""
-    if geq:
-        reports = reports.filter(movement__gte=movement)
-    else:
-        reports = reports.filter(movement__lte=movement)
+    reports = _filter_reports_by_movement(reports, movement, gte)
 
     """sort by applysia num"""
     reports = reports.order_by('time')
@@ -66,7 +69,7 @@ def get_filtered_reports(date, start, end, movement, geq):
     end_time = datetime.strptime(end, time_format)
     reports = [report for report in reports if start_time.hour <= report.time.hour <= end_time.hour]
 
-    av_report = get_average_report_of_all(date, start, end)
+    av_report = get_average_report_of_all(date, start, end, movement, gte)
 
     reports_list = [report.to_mongo().to_dict() for report in reports]
     reports_list.insert(0, av_report)
@@ -126,8 +129,9 @@ def calc_average_of_hour(date, time,reports_cursor):
 
     return average_report
 
+
 # return reports that is an average of ALL aplysias
-def get_average_report_of_all(date, time, end_time=None):
+def get_average_report_of_all(date, time, end_time=None, movement=None, gte=None):
     time_format = "%H:%M"
     start_time = datetime.strptime(time, time_format)
     if end_time:
@@ -140,6 +144,8 @@ def get_average_report_of_all(date, time, end_time=None):
             time_string = current_time.strftime("%H:%M")
             time_string = _get_time_formatted(date, time_string)
             reports = Report.objects(date=date, time=time_string)
+            if movement:
+                reports = _filter_reports_by_movement(reports, movement, gte)
             if reports:
                 hour_average = calc_average_of_hour(date, current_time, reports)
                 reports_list.append(hour_average)
@@ -153,6 +159,8 @@ def get_average_report_of_all(date, time, end_time=None):
         time_string = start_time.strftime("%H:%M")
         time_string = _get_time_formatted(date, time_string)
         reports = Report.objects(date=date, time=time_string)
+        if movement:
+            reports = _filter_reports_by_movement(reports, movement, gte)
         if reports:
             average_rep = calc_average_of_hour(date, start_time, reports)
             return average_rep
@@ -172,12 +180,14 @@ def delete_reports_by_applysia(num):
 
 
 def delete_all_reports_by_date_and_time(date, time):
-    reports_to_delete = Report.objects(date=date, time=time)
+    formatted_time = _get_time_formatted(date, time)
+    reports_to_delete = Report.objects(date=date, time=formatted_time)
     reports_to_delete.delete()
 
 
 def delete_unique_report(date, time, aplysia):
-    reports_to_delete = Report.objects(date=date, time=time, applysia=aplysia)
+    formatted_time = _get_time_formatted(date, time)
+    reports_to_delete = Report.objects(date=date, time=formatted_time, applysia=aplysia)
     reports_to_delete.delete()
 
 # if we want a function that deletes the whole collection of reports

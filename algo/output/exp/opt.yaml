@@ -1,6 +1,6 @@
 weights: yolov5s.pt
 cfg: yolov5/models/yolov5s.yaml
-data: data.yaml
+data: Blue-Snail-13/data.yaml
 hyp:
   lr0: 0.01
   lrf: 0.01
@@ -40,7 +40,7 @@ noval: false
 noautoanchor: false
 noplots: false
 evolve: null
-evolve_population: yolov5\data\hyps
+evolve_population: yolov5/data/hyps
 resume_evolve: null
 bucket: ''
 cache: null
@@ -69,4 +69,4 @@ bbox_interval: -1
 artifact_alias: latest
 ndjson_console: false
 ndjson_file: false
-save_dir: output\exp
+save_dir: output/exp5

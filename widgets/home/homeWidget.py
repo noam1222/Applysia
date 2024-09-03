@@ -6,6 +6,7 @@ from constants import *
 from widgets.report.report import Ui_ReportWidget
 from .AnalyzeWorker import AnalyzeWorker
 from db.controller import *
+
 class HomeWidget(QtWidgets.QWidget):
     def __init__(self, parent):
         super(HomeWidget, self).__init__(parent)
@@ -210,7 +211,6 @@ class HomeWidget(QtWidgets.QWidget):
         filePath, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Choose Video", "", "Video Files (*.mp4 *.avi *.mov)", options=options)
         if not filePath:
             return
-        # TODO check video duration is about an hour
         self.filePath = filePath
         videoName = filePath.split('/')[-1]
         self.chooseVideoBtn.setText(videoName)
@@ -279,7 +279,7 @@ class HomeWidget(QtWidgets.QWidget):
 
         # analyze the video on another thread
         self.analyzeBtn.setEnabled(False)
-        self.progress_dialog = ProgressDialog.ProgressDialog()
+        self.progress_dialog = ProgressDialog()
         self.progress_dialog.show()
 
         video_speed = self.videoSpeedComboBox.currentIndex() + 1
