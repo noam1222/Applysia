@@ -60,7 +60,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.actionWindow.show()
 
 
-if __name__ == "__main__":
+def run_main_window():
     import sys
     from mongoengine import connect
     result = connect(db="applysias", host="mongodb://localhost:27017/")
