@@ -211,7 +211,6 @@ class HomeWidget(QtWidgets.QWidget):
         filePath, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Choose Video", "", "Video Files (*.mp4 *.avi *.mov)", options=options)
         if not filePath:
             return
-        # TODO check video duration is about an hour
         self.filePath = filePath
         videoName = filePath.split('/')[-1]
         self.chooseVideoBtn.setText(videoName)

@@ -33,7 +33,6 @@ def analyze(video_path, video_speed, progress_callback):
     results = {}  # going to store the result dict of app_num: movement, [movement_every_five], [trail_points]
     
     # Get the total number of frames and the frame rate
-    # TODO handle different video speeds
     fps = capture.get(cv2.CAP_PROP_FPS)  # Frames per second
     total_frames = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
     one_hour_frames = int(60 * (60 / video_speed) * fps)
