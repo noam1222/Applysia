@@ -6,6 +6,7 @@ from constants import *
 from widgets.report.report import Ui_ReportWidget
 from .AnalyzeWorker import AnalyzeWorker
 from db.controller import *
+
 class HomeWidget(QtWidgets.QWidget):
     def __init__(self, parent):
         super(HomeWidget, self).__init__(parent)
@@ -279,7 +280,7 @@ class HomeWidget(QtWidgets.QWidget):
 
         # analyze the video on another thread
         self.analyzeBtn.setEnabled(False)
-        self.progress_dialog = ProgressDialog.ProgressDialog()
+        self.progress_dialog = ProgressDialog()
         self.progress_dialog.show()
 
         video_speed = self.videoSpeedComboBox.currentIndex() + 1

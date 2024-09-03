@@ -40,10 +40,10 @@ class Menu(QtWidgets.QWidget):
         self.ReportsSlot.clicked.connect(self.slotClicked)
         self.verticalLayout.addWidget(self.ReportsSlot)
 
-        # Analytics Slot
-        self.AnalyticsSlot = MenuSlot(self, "analytics_icon.png", ANALYTICS_TXT)
-        self.AnalyticsSlot.clicked.connect(self.slotClicked)
-        self.verticalLayout.addWidget(self.AnalyticsSlot)
+        # # Analytics Slot
+        # self.AnalyticsSlot = MenuSlot(self, "analytics_icon.png", ANALYTICS_TXT)
+        # self.AnalyticsSlot.clicked.connect(self.slotClicked)
+        # self.verticalLayout.addWidget(self.AnalyticsSlot)
 
         # vertical spacer to push all up
         self.spacerItem = QtWidgets.QSpacerItem(
@@ -51,7 +51,7 @@ class Menu(QtWidgets.QWidget):
         self.verticalLayout.addItem(self.spacerItem)
 
     def slotClicked(self, clicked_slot: MenuSlot):
-        for slot in [self.HomeSlot, self.ReportsSlot, self.AnalyticsSlot]:
+        for slot in [self.HomeSlot, self.ReportsSlot]:
             if slot != clicked_slot:
                 slot.onLeave()
         self.pressFunc(clicked_slot.label.text())

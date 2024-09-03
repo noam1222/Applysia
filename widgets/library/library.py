@@ -393,8 +393,6 @@ class LibraryWidget(QtWidgets.QWidget):
                 QtWidgets.QMessageBox.information(self, "No results", "There are no reports that much to this filter.")
             return
 
-        # print(self.reports)
-
         times = [[] for i in range(16)]
         # for reports of All
         for report in reports[0]:
