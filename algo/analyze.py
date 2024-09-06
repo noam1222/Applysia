@@ -23,7 +23,7 @@ def is_different(p1, p2):
 def analyze(video_path, video_speed, progress_callback):
     pathlib.PosixPath = pathlib.WindowsPath
     # Load the model
-    model = torch.hub.load("algo/yolov5", 'custom', path="algo/output/exp/weights/best.pt", source="local", force_reload=True)
+    model = torch.hub.load("algo/yolov5", 'custom', path="algo/output/exp4/weights/best.pt", source="local", force_reload=True)
 
     # load the video
     capture = cv2.VideoCapture(video_path)
@@ -56,7 +56,8 @@ def analyze(video_path, video_speed, progress_callback):
             break
 
         # start the analysis on this frame
-        res = model(frame)
+        gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        res = model(gray_frame)
         checked = [False for _ in range(15)]  # safety in case the model recognize 2 aplysias in same cage
         for obj in res.pred[0]:
             x_right, y_top, x_left, y_bottom, confidence, category = obj.numpy()
