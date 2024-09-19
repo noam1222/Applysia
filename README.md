@@ -1,6 +1,7 @@
 # Applysia
 
-**Applysia** is a movement tracking program designed to track the movement of sea-snails. This project was developed as part of our final project for the CS degree at Bar-Ilan University (BIU).
+**Applysia** is a movement tracking program designed to track the movement of sea-snails. This project was developed as part of our final project for the CS degree at Bar-Ilan University (BIU).<br>
+You can find more information about the reasons and motivations behind this project in [this video](https://www.youtube.com/watch?v=Q2s9UgUng8U).
 
 ## Home Screen
 ![image](https://github.com/user-attachments/assets/d43ce886-aecd-4e08-8d3f-b91806c7fb01)
