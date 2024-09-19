@@ -35,6 +35,7 @@ Features:
 ## How to Run
 1. Install the required dependencies: `pip install -r requirements.txt`.
 2. Run the program using the command: `python main.py`.
+3. You can watch a **demo** video of the program [here](https://www.youtube.com/watch?v=4KSlOG40-ik).
 
 ## Customization
 - You can customize the model for other creatures in the cage by changing the path in `algo/output/exp4` to your model (alternatively, add your model in any path you choose and update `algo/analyze.py` to use the correct path).
